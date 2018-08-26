@@ -34,9 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>verdant.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero2" />
@@ -130,6 +133,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\68983602-network-wallpapers.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="verdant.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="verdant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ms-logo-leaf.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

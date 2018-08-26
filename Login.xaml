@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Verdant"
         mc:Ignorable="d"
-        Title="Login - Verdant" Height="399.149" Width="519.876" Loaded="Window_Loaded">
+        Title="Login - Verdant" Height="399.149" Width="519.876" Loaded="Window_Loaded" Icon="verdant.ico" ResizeMode="NoResize">
     <Grid>
-        <Image HorizontalAlignment="Left" Height="368" VerticalAlignment="Top" Width="512" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
+        <Image HorizontalAlignment="Left" Height="370" VerticalAlignment="Top" Width="514" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
 
         <TextBox x:Name="usernameBox" HorizontalAlignment="Left" Height="21" Margin="208,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="217" TabIndex="1" Background="#7F343434" Foreground="White"/>
         <Label Content="ID (아이디):" HorizontalAlignment="Left" Height="26" Margin="124,123,0,0" VerticalAlignment="Top" Width="79" HorizontalContentAlignment="Right" Foreground="White"/>
@@ -19,8 +19,9 @@
         <TextBox x:Name="captchaBox" HorizontalAlignment="Left" Height="20" Margin="170,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Style="{StaticResource VerdantStyling}" Visibility="Hidden"/>
         <Label x:Name="captchaLabel" Content="Captcha:" HorizontalAlignment="Left" Height="25" Margin="93,198,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Right" Foreground="White" Visibility="Hidden"/>
         <CheckBox x:Name="rememberBox" Content="Remember last ID" HorizontalAlignment="Left" Height="22" Margin="54,101,0,0" VerticalAlignment="Top" Width="116" Unchecked="rememberBox_Unchecked" TabIndex="4" Foreground="White"/>
-        <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="10,10,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
-        <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="255,57,0,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
+        <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
+        <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="261,70,-6,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
+        <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
 
     </Grid>
 </Window>

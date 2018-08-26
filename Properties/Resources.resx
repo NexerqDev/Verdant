@@ -130,4 +130,10 @@
   <data name="_68983602_network_wallpapers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\68983602-network-wallpapers.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="verdant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\verdant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ms_logo_leaf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ms-logo-leaf.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
