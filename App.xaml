@@ -1,0 +1,27 @@
+﻿<Application x:Class="Verdant.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Verdant"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#FF8B8B8B" />
+            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#BF343434" />
+            <SolidColorBrush x:Key="ForegroundBrush" Color="#BFFFFFFF" />
+            <SolidColorBrush x:Key="BackgroundBrush" Color="#BF343434" />
+            <Style x:Key="VerdantStyling" TargetType="{x:Type Control}">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                        <Setter Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#BF111111"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,23 @@
+﻿<Window x:Class="Verdant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Verdant"
+        mc:Ignorable="d"
+        Title="Verdant" Height="350" Width="525" Loaded="Window_Loaded">
+    <Grid>
+        <Image HorizontalAlignment="Left" Height="319" VerticalAlignment="Top" Width="517" Stretch="UniformToFill" Source="Resources/natural_space_wallpaper_by_takiidesign-d55v0vn.jpg" OpacityMask="#D8000000"/>
+        <Label x:Name="statusLabel" Content="logged in as:" HorizontalAlignment="Left" Height="39" Margin="82,97,0,0" VerticalAlignment="Top" Width="252" Foreground="White"/>
+        <CheckBox x:Name="autoStartBox" Content="Auto load Verdant to Maple" HorizontalAlignment="Left" Height="20" Margin="171,242,0,0" VerticalAlignment="Top" Width="184" Checked="autoStartBox_Checked" Unchecked="autoStartBox_Checked" Foreground="White"/>
+        <Button x:Name="logoutButton" Content="Logout" HorizontalAlignment="Left" Height="28" Margin="382,280,0,0" VerticalAlignment="Top" Width="125" Click="logoutButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="10,10,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
+        <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="255,57,0,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
+        <Label Content="Games" HorizontalAlignment="Left" Height="35" Margin="221,133,0,0" VerticalAlignment="Top" Width="87" FontSize="22" Foreground="White"/>
+
+        <Border BorderThickness="2" BorderBrush="#FF111111" Margin="225,168,222,84">
+            <Image x:Name="mapleImage" Stretch="UniformToFill" Source="Resources/mslogo.png" MouseUp="mapleImage_MouseUp"/>
+        </Border>
+        <Image x:Name="avatarImage" HorizontalAlignment="Left" Height="55" Margin="22,67,0,0" VerticalAlignment="Top" Width="55"/>
+    </Grid>
+</Window>
