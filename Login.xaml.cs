@@ -97,9 +97,9 @@ namespace Verdant
                     account.WaitingCaptcha = false;
                     return;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error...\n\n" + e.ToString());
+                    MessageBox.Show("Error...\n\n" + ex.ToString());
                 }
             }
             else
