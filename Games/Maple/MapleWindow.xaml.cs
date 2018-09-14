@@ -23,6 +23,7 @@ namespace Verdant.Games.Maple
         private MainWindow mainWindow;
 
         public MapleGame Maple;
+        public bool ToExit = false;
 
         public MapleWindow(MainWindow mw)
         {
@@ -76,7 +77,7 @@ namespace Verdant.Games.Maple
             }
 
             if ((bool)exitCheckbox.IsChecked)
-                Application.Current.Shutdown();
+                ToExit = true;
 
             Close();
         }

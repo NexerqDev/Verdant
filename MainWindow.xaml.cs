@@ -55,13 +55,21 @@ namespace Verdant
 
         private void mapleImage_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            (new Games.Maple.MapleWindow(this)).ShowDialog();
+            loadMaple();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if (Properties.Settings.Default.autoMapleStart)
-                (new Games.Maple.MapleWindow(this)).ShowDialog();
+                loadMaple();
+        }
+
+        private void loadMaple()
+        {
+            var w = new Games.Maple.MapleWindow(this);
+            w.ShowDialog();
+            if (w.ToExit)
+                Application.Current.Shutdown();
         }
     }
 }
