@@ -46,7 +46,9 @@ namespace Verdant.Games.Maple
                 Debug.WriteLine("have to channel");
                 await channeling();
 
-                Debug.WriteLine("channeled, getting again");
+                Debug.WriteLine("channeled, saving and getting again");
+                Account.SaveCookies();
+
                 if (!(await getCurrentMaple()))
                     return false;
             }
@@ -126,6 +128,8 @@ namespace Verdant.Games.Maple
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
             HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
+
+            Account.SaveCookies();
 
             await getCurrentMaple();
         }
