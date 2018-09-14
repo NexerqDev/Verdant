@@ -51,6 +51,10 @@ namespace Verdant
                 // just continue on down
                 MessageBox.Show("Your Naver login has expired. Please login again.");
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error...\n\n" + e.ToString());
+            }
             finally
             {
                 enableStuff(true);
@@ -92,6 +96,10 @@ namespace Verdant
                     captchaLabel.Visibility = Visibility.Hidden;
                     account.WaitingCaptcha = false;
                     return;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error...\n\n" + e.ToString());
                 }
             }
             else

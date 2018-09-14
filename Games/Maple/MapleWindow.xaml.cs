@@ -65,8 +65,16 @@ namespace Verdant.Games.Maple
         private async void startButton_Click(object sender, RoutedEventArgs e)
         {
             startButton.IsEnabled = false;
-            await Maple.Start();
-            
+
+            try
+            {
+                await Maple.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting game...\n\n" + ex.ToString());
+            }
+
             if ((bool)exitCheckbox.IsChecked)
                 Application.Current.Shutdown();
 
@@ -97,7 +105,16 @@ namespace Verdant.Games.Maple
 
             mapleIdBox.IsEnabled = false;
             mapleIdLabel.Content = "Switching...";
-            await Maple.SwitchMapleId(mapleIdBox.Text);
+
+            try
+            {
+                await Maple.SwitchMapleId(mapleIdBox.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error swiching IDs...\n\n" + ex.ToString());
+            }
+
             mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MapleId;
             mapleIdBox.IsEnabled = true;
         }
