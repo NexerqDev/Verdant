@@ -31,6 +31,12 @@ namespace Verdant
             Account = new NaverAccount(PathToCookies);
 
             (new Login(this)).ShowDialog();
+            if (!Account.LoggedIn)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
             statusLabel.Content = "logged in as: " + Account.Nickname;
 
             if (!String.IsNullOrEmpty(Account.AvatarUrl))

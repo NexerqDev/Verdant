@@ -39,6 +39,7 @@ namespace Verdant
 
         public bool WaitingOtp = false; // needs otp
         public bool WaitingCaptcha = false;
+        public bool LoggedIn = false;
         public string CaptchaImageUrl => $"https://nid.naver.com/login/image/captcha/nhncaptchav4.gif?key={CaptchaKey}&1";
         public string CaptchaKey;
 
@@ -229,6 +230,7 @@ namespace Verdant
 
             await WebClient.GetAsync(m.Groups[1].Value);
             SaveCookies();
+            LoggedIn = true;
         }
 
         public async Task Login(string username, string password, string captcha = null)
@@ -338,6 +340,7 @@ namespace Verdant
 
             await WebClient.GetAsync(m.Groups[1].Value);
             SaveCookies();
+            LoggedIn = true;
         }
 
         public class NaverKeySet

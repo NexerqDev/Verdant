@@ -95,6 +95,7 @@ namespace Verdant
                     captchaImage.Visibility = Visibility.Hidden;
                     captchaLabel.Visibility = Visibility.Hidden;
                     account.WaitingCaptcha = false;
+                    captchaBox.Text = "";
                     return;
                 }
                 catch (Exception ex)
