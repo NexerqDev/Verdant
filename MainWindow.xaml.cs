@@ -33,11 +33,14 @@ namespace Verdant
             (new Login(this)).ShowDialog();
             statusLabel.Content = "logged in as: " + Account.Nickname;
 
-            BitmapImage bi = new BitmapImage();
-            bi.BeginInit();
-            bi.UriSource = new Uri(Account.AvatarUrl, UriKind.Absolute);
-            bi.EndInit();
-            avatarImage.Source = bi;
+            if (!String.IsNullOrEmpty(Account.AvatarUrl))
+            {
+                BitmapImage bi = new BitmapImage();
+                bi.BeginInit();
+                bi.UriSource = new Uri(Account.AvatarUrl, UriKind.Absolute);
+                bi.EndInit();
+                avatarImage.Source = bi;
+            }
         }
 
         private void autoStartBox_Checked(object sender, RoutedEventArgs e)
