@@ -57,6 +57,14 @@ namespace Verdant
 
         private void logoutButton_Click(object sender, RoutedEventArgs e)
         {
+            
+            try
+            {
+                // run synchronously
+                var r = Account.WebClient.GetAsync("http://static.nid.naver.com/sso/logout.nhn?return_url=https%3A%2F%2Fwww.naver.com%2F").Result;
+            }
+            catch { }
+
             File.Delete(PathToCookies);
             MessageBox.Show("Logged out. Please restart Verdant if you wish to relogin.");
             Application.Current.Shutdown();

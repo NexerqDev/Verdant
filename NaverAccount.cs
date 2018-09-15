@@ -174,7 +174,8 @@ namespace Verdant
                 { "resp", "" },
                 { "ru", "" },
                 { "id", "" },
-                { "pw", "" }
+                { "pw", "" },
+                { "nvlong", "on" } // tick "stay logged in" - so we're in for longer
             };
             if (WaitingCaptcha)
             {
