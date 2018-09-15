@@ -89,11 +89,12 @@ namespace Verdant
                 }
                 catch (NaverAccount.WrongCaptchaException)
                 {
-                    MessageBox.Show("Invalid captcha... relog pls");
+                    MessageBox.Show("Invalid captcha... please try to login again.");
                     enableStuff(true);
                     captchaBox.Visibility = Visibility.Hidden;
                     captchaImage.Visibility = Visibility.Hidden;
                     captchaLabel.Visibility = Visibility.Hidden;
+                    refreshCaptchaButton.Visibility = Visibility.Hidden;
                     account.WaitingCaptcha = false;
                     captchaBox.Text = "";
                     return;
@@ -113,6 +114,7 @@ namespace Verdant
                 captchaBox.Visibility = Visibility.Visible;
                 captchaImage.Visibility = Visibility.Visible;
                 captchaLabel.Visibility = Visibility.Visible;
+                refreshCaptchaButton.Visibility = Visibility.Visible;
 
                 statusLabel.Content = "Captcha required.";
                 BitmapImage bi = new BitmapImage();
@@ -186,6 +188,17 @@ namespace Verdant
                 return;
             Properties.Settings.Default.naverId = "";
             Properties.Settings.Default.Save();
+        }
+
+        int refreshCaptchaTimes = 1;
+        private void refreshCaptchaButton_Click(object sender, RoutedEventArgs e)
+        {
+            captchaImage.Source = null;
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(account.CaptchaImageUrl + new string('1', ++refreshCaptchaTimes), UriKind.Absolute);
+            bi.EndInit();
+            captchaImage.Source = bi;
         }
     }
 }

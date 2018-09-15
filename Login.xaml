@@ -22,6 +22,7 @@
         <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
         <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="261,70,-6,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
+        <Button x:Name="refreshCaptchaButton" Content="New Captcha" HorizontalAlignment="Left" Height="26" Margin="342,265,0,0" VerticalAlignment="Top" Width="110" Style="{StaticResource VerdantStyling}" Click="refreshCaptchaButton_Click" Visibility="Hidden"/>
 
     </Grid>
 </Window>
