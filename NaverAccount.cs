@@ -259,13 +259,17 @@ namespace Verdant
 
             string rawData = await res.Content.ReadAsStringAsync();
             if (rawData.Contains("Failure"))
+            {
+                LoggedIn = false;
                 throw new LoginSessionExpiredException();
+            }
 
             res.EnsureSuccessStatusCode();
             dynamic data = JObject.Parse(rawData);
 
             Nickname = data["nick_name"];
             AvatarUrl = data["image_url"];
+            LoggedIn = true;
         }
 
         private Regex otpKeyRegex = new Regex("id=\"key\" name=\"key\" value=\"(.*?)\"");
