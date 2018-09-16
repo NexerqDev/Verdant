@@ -199,6 +199,7 @@ namespace Verdant
             bi.UriSource = new Uri(account.CaptchaImageUrl + new string('1', ++refreshCaptchaTimes), UriKind.Absolute);
             bi.EndInit();
             captchaImage.Source = bi;
+            captchaBox.Focus();
         }
     }
 }

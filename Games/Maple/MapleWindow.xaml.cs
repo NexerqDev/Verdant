@@ -33,6 +33,7 @@ namespace Verdant.Games.Maple
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;
             startButton.IsEnabled = false;
+            exitCheckbox.IsEnabled = false;
         }
 
         bool loaded = false;
@@ -59,6 +60,7 @@ namespace Verdant.Games.Maple
             changeMapleIdButton.IsEnabled = true;
             startButton.IsEnabled = true;
 
+            exitCheckbox.IsEnabled = true;
             exitCheckbox.IsChecked = Properties.Settings.Default.autoMapleExit;
             loaded = true;
         }
