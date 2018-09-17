@@ -49,9 +49,34 @@ namespace Verdant.Games.Maple
 
             mapleIdLabel.Content = "Loading...";
             Maple = new MapleGame(mainWindow.Account);
-            if (!(await Maple.Init()))
+
+            try
             {
-                MessageBox.Show("error connecting to maple rn...");
+                await Maple.Init();
+            }
+            catch (MapleGame.MapleNotFoundException)
+            {
+                MessageBox.Show("Looks like we couldn't find your installation of MapleStory! Make sure you have KMS + NGM installed properly!");
+                Close();
+                return;
+            }
+            catch (MapleGame.ChannelingRequiredException)
+            {
+                mapleIdLabel.Content = "Loading... (channeling)";
+                try
+                {
+                    await Maple.Channel();
+                }
+                catch
+                {
+                    MessageBox.Show("Error channeling with Nexon and your Naver account. Please try again later.");
+                    Close();
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error connecting to Maple right now, or you have not made a Maple ID! Please try again later.");
                 Close();
                 return;
             }

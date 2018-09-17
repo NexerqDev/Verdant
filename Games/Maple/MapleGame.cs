@@ -25,14 +25,17 @@ namespace Verdant.Games.Maple
             Account = account;
         }
 
-        public async Task<bool> Init()
+        public class MapleNotFoundException : Exception { }
+        public class ChannelingRequiredException : Exception { }
+
+        public async Task Init()
         {
             // Find NGM location
             using (var reg = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)) // 32bit reg
             using (RegistryKey key = reg.OpenSubKey("Software\\Nexon\\Shared", false))
             {
                 if (key == null)
-                    return false;
+                    throw new MapleNotFoundException();
 
                 ngmPath = key.GetValue(null).ToString() + @"\NGM\NGM.exe";
             }
@@ -42,18 +45,19 @@ namespace Verdant.Games.Maple
             // Or will not channel properly!!
             Debug.WriteLine("getting maple");
             if (!(await getCurrentMaple()))
-            {
-                Debug.WriteLine("have to channel");
-                await channeling();
+                throw new ChannelingRequiredException();
+        }
 
-                Debug.WriteLine("channeled, saving and getting again");
-                Account.SaveCookies();
+        public async Task Channel()
+        {
+            Debug.WriteLine("have to channel");
+            await channeling();
 
-                if (!(await getCurrentMaple()))
-                    return false;
-            }
+            Debug.WriteLine("channeled, saving and getting again");
+            Account.SaveCookies();
 
-            return true;
+            if (!(await getCurrentMaple()))
+                throw new Exception("no");
         }
 
 
