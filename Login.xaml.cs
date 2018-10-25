@@ -81,32 +81,42 @@ namespace Verdant
             enableStuff(false);
 
             statusLabel.Content = "Logging in...";
-            if (account.WaitingCaptcha)
+            try
             {
-                try
+                if (account.WaitingCaptcha)
                 {
-                    await account.Login(usernameBox.Text, passwordBox.Password, captchaBox.Text);
+                    try
+                    {
+                        await account.Login(usernameBox.Text, passwordBox.Password, captchaBox.Text);
+                    }
+                    catch (NaverAccount.WrongCaptchaException)
+                    {
+                        MessageBox.Show("Invalid captcha... please try to login again.");
+                        enableStuff(true);
+                        captchaBox.Visibility = Visibility.Hidden;
+                        captchaImage.Visibility = Visibility.Hidden;
+                        captchaLabel.Visibility = Visibility.Hidden;
+                        refreshCaptchaButton.Visibility = Visibility.Hidden;
+                        account.WaitingCaptcha = false;
+                        captchaBox.Text = "";
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error...\n\n" + ex.ToString());
+                        return;
+                    }
                 }
-                catch (NaverAccount.WrongCaptchaException)
+                else
                 {
-                    MessageBox.Show("Invalid captcha... please try to login again.");
-                    enableStuff(true);
-                    captchaBox.Visibility = Visibility.Hidden;
-                    captchaImage.Visibility = Visibility.Hidden;
-                    captchaLabel.Visibility = Visibility.Hidden;
-                    refreshCaptchaButton.Visibility = Visibility.Hidden;
-                    account.WaitingCaptcha = false;
-                    captchaBox.Text = "";
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error...\n\n" + ex.ToString());
+                    await account.Login(usernameBox.Text, passwordBox.Password);
                 }
             }
-            else
+            catch (NaverAccount.WrongPasswordException)
             {
-                await account.Login(usernameBox.Text, passwordBox.Password);
+                MessageBox.Show("Invalid password. Please try again.");
+                enableStuff(true);
+                return;
             }
 
             if (account.WaitingCaptcha)

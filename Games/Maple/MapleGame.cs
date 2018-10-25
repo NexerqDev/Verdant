@@ -13,10 +13,11 @@ namespace Verdant.Games.Maple
     public class MapleGame
     {
         public NaverAccount Account;
-        public string MapleId;
+        public string MainCharName;
         public List<string> MapleIds;
 
         private string ngmPath;
+        private string launchWID;
 
         private HttpClient webClient => Account.WebClient;
 
@@ -60,17 +61,38 @@ namespace Verdant.Games.Maple
                 throw new Exception("no");
         }
 
-
-        // IE: "C:\ProgramData\Nexon\NGM\NGM.exe" -dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'MSGENC_cookie:45' -passarg:'WebStart' -timestamp:UNIX_TIMESTAMP -position:'GameWeb|http://maplestory.nexon.game.naver.com/MapleStory/Page/Optimize.aspx'
-        private const string LAUNCH_LINE = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:45' -passarg:'WebStart' -timestamp:{1} -position:'GameWeb|http://maplestory.nexon.game.naver.com/MapleStory/Page/Optimize.aspx'";
+        private const string LAUNCH_LINE = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:{1}' -passarg:'WebStart' -timestamp:{2} -position:'GameWeb|https://maplestory.nexon.game.naver.com/' -service:6";
         public async Task Start()
         {
-            string ts = ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString(); // timestamp: https://stackoverflow.com/questions/17632584/how-to-get-the-unix-timestamp-in-c-sharp
-            // last minute cookies need to be get here - MSGENC
-            await webClient.GetAsync("http://maplestory.nexon.game.naver.com/Common/A/B.aspx?_=" + ts);
+            // last minute cookies need to be get here - MSGENC and what not
+            int ts = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // timestamp: https://stackoverflow.com/questions/17632584/how-to-get-the-unix-timestamp-in-c-sharp
+
+            // last min update sesh
+            Debug.WriteLine("updating session");
+            var sesRes = await webClient.GetAsync("https://sso.nexon.game.naver.com/Ajax/Default.aspx?_vb=UpdateSession");
+            Debug.WriteLine(await sesRes.Content.ReadAsStringAsync());
+
+            Debug.WriteLine("msgenc update");
+            // msgenc
+            // along with the "WID" (check the homepage js, its basically append :WID (number) to end of msgenc - we store this whenever just get homepage
+            HttpRequestMessage req = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://maplestory.nexon.game.naver.com/authentication/swk?h="),
+                Content = null
+            };
+            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
+            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+
+            var res = await webClient.SendAsync(req);
+            string data = await res.Content.ReadAsStringAsync();
+            if (!data.Contains("\"Code\":1"))
+                throw new Exception("could not auth for game...");
 
             string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))["MSGENC"].Value;
-            string args = String.Format(LAUNCH_LINE, msgenc, ts);
+
+            Debug.WriteLine("launching");
+            string args = String.Format(LAUNCH_LINE, msgenc, launchWID, ts.ToString());
             var psi = new ProcessStartInfo(ngmPath, args);
             Process.Start(psi);
         }
@@ -78,33 +100,45 @@ namespace Verdant.Games.Maple
         private async Task channeling()
         {
             await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046"); // redirs a few times for cookies
-            await webClient.GetAsync("http://maplestory.nexon.game.naver.com/MapleStory/Page/Gnx.aspx?URL=Home/Index"); // the home page redirects a few times too
-
-            // this last one probably doesnt matter but we do it anyway
-            //HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Get, "http://maplestory.nexon.game.naver.com/MapleStory/Page/Gnx.aspx?URL=Home/Index");
-            //req.Headers.Add("Referer", "http://nxgamechanneling.nexon.game.naver.com/");
-            //await webClient.SendAsync(req);
+            await webClient.GetAsync("http://maplestory.nexon.game.naver.com"); // the home page may redirect too
         }
 
-        private Regex mapleIdRegex = new Regex("__nxArgs\\.identity = '(.+?)';");
+        private Regex charRepRegex = new Regex("<dd class=\"login_id\"><a href=\".+?\" target=\"_blank\">(.+?)님<\\/a><\\/dd>");
+        private Regex launchWIDRegex = new Regex("PLATFORM\\.LaunchGame\\('(\\d+)'\\)");
         private async Task<bool> getCurrentMaple()
         {
-            HttpResponseMessage res = await webClient.GetAsync("http://maplestory.nexon.game.naver.com/MapleStory/Page/Gnx.aspx?URL=Home/Index");
+            HttpResponseMessage res = await webClient.GetAsync("http://maplestory.nexon.game.naver.com");
             res.EnsureSuccessStatusCode();
 
             string data = await res.Content.ReadAsStringAsync();
-            Match m = mapleIdRegex.Match(data);
-            if (!m.Success)
+            if (!data.Contains("isLogin: true"))
                 return false;
 
-            MapleId = m.Groups[1].Value;
+            Match wid = launchWIDRegex.Match(data);
+            if (!wid.Success)
+                return false;
+            launchWID = wid.Groups[1].Value;
+            Debug.WriteLine("wid: " + launchWID);
+
+            Match m = charRepRegex.Match(data);
+            MainCharName = "(Unknown)";
+            if (m.Success)
+                MainCharName = m.Groups[1].Value;
             return true;
         }
 
-        private Regex mapleIdsRegex = new Regex("'>(.+?)<\\/label>");
+        private Regex mapleIdsRegex = new Regex(">(.+?)<\\/a>");
         public async Task GetMapleIds()
         {
-            HttpResponseMessage res = await webClient.GetAsync("http://maplestory.nexon.game.naver.com/MapleStory/Common/GetGameIdListByName.aspx");
+            HttpRequestMessage req = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/IDList")
+            };
+            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
+            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+
+            HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
 
             string data = await res.Content.ReadAsStringAsync();
@@ -118,18 +152,19 @@ namespace Verdant.Games.Maple
         {
             var _postData = new Dictionary<string, string>
             {
-                { "gid", mapleId }
+                { "id", mapleId },
+                { "master", "0" },
+                { "redirectTo", "https://maplestory.nexon.game.naver.com/" }
             };
             var postData = new FormUrlEncodedContent(_postData);
 
             HttpRequestMessage req = new HttpRequestMessage()
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri("http://maplestory.nexon.game.naver.com/MapleStory/Common/OtherGameIdLogin.aspx")
+                RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/ChangeID")
             };
             req.Content = postData;
-            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/MapleStory/Page/GnxPopup.aspx?URL=Membership/PopOtherGameIdLogin");
-            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
             HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
 

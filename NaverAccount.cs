@@ -146,6 +146,7 @@ namespace Verdant
         }
 
         public class WrongCaptchaException : Exception {}
+        public class WrongPasswordException : Exception {}
 
         private Regex loginSuccessRegex = new Regex("location\\.replace\\(\"(.*?)\"\\);");
         private Regex captchaRegex = new Regex("name=\"chptchakey\" id=\"chptchakey\" value=\"(.*?)\"");
@@ -227,7 +228,7 @@ namespace Verdant
             // redirect regex
             Match m = loginSuccessRegex.Match(data);
             if (!m.Success)
-                throw new Exception();
+                throw new WrongPasswordException();
 
             await WebClient.GetAsync(m.Groups[1].Value);
             SaveCookies();
@@ -270,6 +271,9 @@ namespace Verdant
 
             Nickname = data["nick_name"];
             AvatarUrl = data["image_url"];
+
+            await WebClient.GetAsync("https://game.naver.com/");
+            SaveCookies();
             LoggedIn = true;
         }
 

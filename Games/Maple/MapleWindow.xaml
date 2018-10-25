@@ -13,8 +13,8 @@
 
         <CheckBox x:Name="exitCheckbox" Content="Exit after launching" HorizontalAlignment="Left" Height="21" Margin="19,244,0,0" VerticalAlignment="Top" Width="234" Checked="exitCheckbox_Checked" Unchecked="exitCheckbox_Checked" Foreground="White"/>
         <Button x:Name="startButton" Content="GAME START // 게임시작" HorizontalAlignment="Left" Height="47" Margin="290,202,0,0" VerticalAlignment="Top" Width="193" Click="startButton_Click" Style="{StaticResource VerdantStyling}"/>
-        <Label x:Name="mapleIdLabel" Content="Maple ID (메이플ID):" HorizontalAlignment="Left" Height="28" Margin="16,105,0,0" VerticalAlignment="Top" Width="283" Foreground="White"/>
-        <ComboBox x:Name="mapleIdBox" HorizontalAlignment="Left" Height="26" Margin="19,172,0,0" VerticalAlignment="Top" Width="232" IsReadOnly="True" DropDownClosed="mapleIdBox_DropDownClosed" PreviewKeyDown="mapleIdBox_PreviewKeyDown" Style="{StaticResource VerdantStyling}"/>
+        <Label x:Name="mapleIdLabel" Content="Web Main Character (대표 캐릭터): " HorizontalAlignment="Left" Height="28" Margin="16,105,0,0" VerticalAlignment="Top" Width="283" Foreground="White"/>
+        <ComboBox x:Name="mapleIdBox" HorizontalAlignment="Left" Height="26" Margin="19,172,0,0" VerticalAlignment="Top" Width="232" IsReadOnly="True" DropDownClosed="mapleIdBox_DropDownClosed" PreviewKeyDown="mapleIdBox_PreviewKeyDown" Style="{StaticResource VerdantStyling}" Foreground="#FF0E0E0E"/>
         <Button x:Name="changeMapleIdButton" Content="Change Maple ID // 메이플ID 선택" HorizontalAlignment="Left" Height="29" Margin="19,138,0,0" VerticalAlignment="Top" Width="232" Click="changeMapleIdButton_Click" Style="{StaticResource VerdantStyling}"/>
         <Label Content="MapleStory" HorizontalAlignment="Left" Height="68" Margin="85,29,0,0" VerticalAlignment="Top" Width="331" Foreground="White" FontSize="36"/>
         <Image HorizontalAlignment="Left" Height="53" Margin="452,10,0,0" VerticalAlignment="Top" Width="53" Source="/Verdant;component/verdant.png"/>

@@ -81,7 +81,7 @@ namespace Verdant.Games.Maple
                 return;
             }
 
-            mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MapleId;
+            mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
             changeMapleIdButton.IsEnabled = true;
             startButton.IsEnabled = true;
 
@@ -121,14 +121,14 @@ namespace Verdant.Games.Maple
             }
 
             Maple.MapleIds.ForEach(x => mapleIdBox.Items.Add(x));
-            mapleIdBox.Text = Maple.MapleId;
+            mapleIdBox.Text = Maple.MainCharName;
             mapleIdBox.IsEnabled = true;
         }
 
         private async void mapleIdBox_DropDownClosed(object sender, EventArgs e)
         {
             // in case
-            if (mapleIdBox.Text == Maple.MapleId)
+            if (mapleIdBox.Text == Maple.MainCharName)
                 return;
 
             mapleIdBox.IsEnabled = false;
@@ -143,7 +143,7 @@ namespace Verdant.Games.Maple
                 MessageBox.Show("Error swiching IDs...\n\n" + ex.ToString());
             }
 
-            mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MapleId;
+            mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MainCharName;
             mapleIdBox.IsEnabled = true;
         }
 
