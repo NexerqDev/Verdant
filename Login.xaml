@@ -15,9 +15,9 @@
         <Button x:Name="loginButton" Content="Login / 로그인" HorizontalAlignment="Left" Height="27" Margin="360,195,0,0" VerticalAlignment="Top" Width="110" Click="loginButton_Click" TabIndex="3" IsDefault="True" Style="{StaticResource VerdantStyling}"/>
         <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" Height="22" Margin="208,158,0,0" VerticalAlignment="Top" Width="217" TabIndex="2" Style="{StaticResource VerdantStyling}"/>
         <Label x:Name="statusLabel" Content="Ready" HorizontalAlignment="Left" Height="31" Margin="10,334,0,0" VerticalAlignment="Top" Width="492" HorizontalContentAlignment="Center" Foreground="White"/>
-        <Image x:Name="captchaImage" HorizontalAlignment="Left" Height="64" Margin="124,250,0,0" VerticalAlignment="Top" Width="277" Visibility="Hidden"/>
-        <TextBox x:Name="captchaBox" HorizontalAlignment="Left" Height="20" Margin="170,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Style="{StaticResource VerdantStyling}" Visibility="Hidden"/>
-        <Label x:Name="captchaLabel" Content="Captcha:" HorizontalAlignment="Left" Height="25" Margin="93,198,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Right" Foreground="White" Visibility="Hidden"/>
+        <Image x:Name="captchaImage" HorizontalAlignment="Left" Height="99" Margin="108,228,0,0" VerticalAlignment="Top" Width="300" Visibility="Hidden"/>
+        <TextBox x:Name="captchaBox" HorizontalAlignment="Left" Height="20" Margin="170,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Style="{StaticResource VerdantStyling}" Visibility="Hidden"/>
+        <Label x:Name="captchaLabel" Content="Captcha:" HorizontalAlignment="Left" Height="25" Margin="93,194,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Right" Foreground="White" Visibility="Hidden"/>
         <CheckBox x:Name="rememberBox" Content="Remember last ID" HorizontalAlignment="Left" Height="22" Margin="54,101,0,0" VerticalAlignment="Top" Width="116" Unchecked="rememberBox_Unchecked" TabIndex="4" Foreground="White"/>
         <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
         <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="261,70,-6,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>

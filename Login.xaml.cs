@@ -91,7 +91,7 @@ namespace Verdant
                     }
                     catch (NaverAccount.WrongCaptchaException)
                     {
-                        MessageBox.Show("Invalid captcha... please try to login again.");
+                        MessageBox.Show("Invalid captcha OR invalid password - please double check these and try again!");
                         enableStuff(true);
                         captchaBox.Visibility = Visibility.Hidden;
                         captchaImage.Visibility = Visibility.Hidden;

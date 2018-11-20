@@ -21,8 +21,14 @@ All you have to do is login to your Naver account (OTP supported), and then you 
 
 Note that NGM must be installed, and obviously MapleStory must be too for this launcher to function properly! Other than that, enjoy!
 
+Also, as this program is still definitely a work-in-progress, expect bugs! If you do find any however, please report them at [the issue tracker](https://github.com/NexerqDev/Verdant/issues), that would be most appreciated.
+
+If you do find this program useful, please consider leaving it a [star](https://github.com/NexerqDev/Verdant/stargazers)! Thanks!
+
 ## Disclaimer
 By using this software, you agree that I (Nicholas Tay <nexerq@gmail.com>) and/or collborators am not responsible for any damages that may be caused using this software (account banned, computer went on fire, etc.). That being said, I have tried to the best of my ability to make the program as transparent as possible, and this realistically should not happen. I mean - I use this software to get in and out of my account all the time, so it should be just fine. Basically, all the details can be found in the `LICENSE` file as in the root of the source code repository. Anyways, enjoy and have fun!
+
+If you still don't trust me, you are welcome to look through the entire source code yourself, de/compile binaries, and whatever!
 
 A note for Nexon (넥슨): if you don't like this software, please contact me via email or Twitter instead of banning me or whatever, and I will happily get it resolved ASAP (take down the repo, whatever). Thank you!
 
