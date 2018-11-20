@@ -4,6 +4,8 @@
 
 # Verdant
 
+[![GitHub latest release](https://img.shields.io/github/release-pre/NexerqDev/Verdant.svg)](https://github.com/NexerqDev/Verdant/releases) [![GitHub stars](https://img.shields.io/github/stars/NexerqDev/Verdant.svg)](https://github.com/NexerqDev/Verdant/stargazers) [![License](https://img.shields.io/badge/license-Zlib-green.svg)](https://github.com/NexerqDev/Verdant/blob/master/LICENSE) 
+
 *An open-source game launcher primarily for Naver Channeling Korean Maplestory players. (more games maybe in the future...)*
 
 *(오픈소스 메이플스토리 네이버 채널링 게임런처)*
