@@ -14,6 +14,7 @@ namespace Verdant
     /// </summary>
     public partial class App : Application
     {
+#if !DEBUG
         public App() : base()
         {
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
@@ -46,5 +47,6 @@ namespace Verdant
             Application.Current.Shutdown();
             e.Handled = true;
         }
+#endif
     }
 }

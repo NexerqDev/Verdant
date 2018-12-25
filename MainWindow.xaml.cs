@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,13 @@ using System.Windows.Navigation;
 
 namespace Verdant
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        public NaverAccount Account = null;
-
         public string PathToCookies = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "login.vdt");
+
+        public NaverAccount Account = null;
+        public MapleGame Maple;
+        public bool ToExit = false;
 
         public MainWindow()
         {
@@ -47,17 +47,148 @@ namespace Verdant
                 bi.EndInit();
                 avatarImage.Source = bi;
             }
+
+            mapleIdBox.IsEnabled = false;
+            changeMapleIdButton.IsEnabled = false;
+            startButton.IsEnabled = false;
+            exitCheckbox.IsEnabled = false;
         }
 
-        private void autoStartBox_Checked(object sender, RoutedEventArgs e)
+        bool loaded = false;
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.autoMapleStart = (bool)autoStartBox.IsChecked;
+            if (Process.GetProcessesByName("MapleStory").Length > 0
+             || Process.GetProcessesByName("NGM").Length > 0)
+            {
+                var mbr = MessageBox.Show("You are already playing MapleStory! Continue?", "Verdant", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (mbr == MessageBoxResult.No)
+                {
+                    Close();
+                    return;
+                }
+            }
+
+            mapleIdLabel.Content = "Loading...";
+            Maple = new MapleGame(Account);
+
+            try
+            {
+                await Maple.Init();
+            }
+            catch (MapleGame.MapleNotFoundException)
+            {
+                MessageBox.Show("Looks like we couldn't find your installation of MapleStory! Make sure you have KMS + NGM installed properly!");
+                Close();
+                return;
+            }
+            catch (MapleGame.ChannelingRequiredException)
+            {
+                mapleIdLabel.Content = "Loading... (channeling)";
+                try
+                {
+                    await Maple.Channel();
+                }
+                catch
+                {
+                    MessageBox.Show("Error channeling with Nexon and your Naver account. Please try again later.");
+                    Close();
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error connecting to Maple right now, or you have not made a Maple ID! Please try again later.");
+                Close();
+                return;
+            }
+
+            mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
+            changeMapleIdButton.IsEnabled = true;
+            startButton.IsEnabled = true;
+
+            exitCheckbox.IsEnabled = true;
+            exitCheckbox.IsChecked = Properties.Settings.Default.autoMapleExit;
+            loaded = true;
+        }
+
+        private async void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            startButton.IsEnabled = false;
+
+            try
+            {
+                await Maple.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting game...\n\n" + ex.ToString());
+            }
+
+            if ((bool)exitCheckbox.IsChecked)
+                ToExit = true;
+
+            Close();
+        }
+
+        private async void changeMapleIdButton_Click(object sender, RoutedEventArgs e)
+        {
+            changeMapleIdButton.IsEnabled = false;
+            await Maple.GetMapleIds();
+
+            if (Maple.MapleIds.Count < 2)
+            {
+                MessageBox.Show("You only have 1 maple id...");
+                return;
+            }
+
+            Maple.MapleIds.ForEach(x => mapleIdBox.Items.Add(x));
+            mapleIdBox.Text = Maple.MainCharName;
+            mapleIdBox.IsEnabled = true;
+        }
+
+        private async void mapleIdBox_DropDownClosed(object sender, EventArgs e)
+        {
+            // in case
+            if (mapleIdBox.Text == Maple.MainCharName)
+                return;
+
+            mapleIdBox.IsEnabled = false;
+            mapleIdLabel.Content = "Switching...";
+
+            try
+            {
+                await Maple.SwitchMapleId(mapleIdBox.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error swiching IDs...\n\n" + ex.ToString());
+            }
+
+            mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MainCharName;
+            mapleIdBox.IsEnabled = true;
+        }
+
+        private void mapleIdBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/5e14706e-308b-44b1-8d74-aadd89e4c940/disable-up-and-down-arrow-access-key-of-combobox?forum=wpf
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                e.Handled = true;
+                return; // do not call the base class method OnPreviewKeyDown()
+            }
+            base.OnPreviewKeyDown(e);
+        }
+
+        private void exitCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!loaded)
+                return;
+            Properties.Settings.Default.autoMapleExit = (bool)exitCheckbox.IsChecked;
             Properties.Settings.Default.Save();
         }
 
         private void logoutButton_Click(object sender, RoutedEventArgs e)
         {
-            
             try
             {
                 // run synchronously
@@ -68,25 +199,6 @@ namespace Verdant
             File.Delete(PathToCookies);
             MessageBox.Show("Logged out. Please restart Verdant if you wish to relogin.");
             Application.Current.Shutdown();
-        }
-
-        private void mapleImage_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            loadMaple();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (Properties.Settings.Default.autoMapleStart)
-                loadMaple();
-        }
-
-        private void loadMaple()
-        {
-            var w = new Games.Maple.MapleWindow(this);
-            w.ShowDialog();
-            if (w.ToExit)
-                Application.Current.Shutdown();
         }
     }
 }

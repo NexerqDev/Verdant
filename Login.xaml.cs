@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,6 +61,8 @@ namespace Verdant
             {
                 enableStuff(true);
                 focusFields();
+
+                tryClipboardLogin();
             }
         }
 
@@ -210,6 +214,42 @@ namespace Verdant
             bi.EndInit();
             captchaImage.Source = bi;
             captchaBox.Focus();
+        }
+
+        Regex devToolsRegex = new Regex("^(.*?)\\t(.*?)\\t", RegexOptions.Multiline);
+        private async void tryClipboardLogin()
+        {
+            // clipboard cookie based login - fuck naver's absolutely terrible captcha, and cbs working out how bvsd works! :)
+            // we have to use dev tools copy paste though because NID_AUT is httponly, so cant just use document.cookie :(
+            try
+            {
+                string clipboard = Clipboard.GetText(TextDataFormat.Text);
+                if (!clipboard.Contains("NID_AUT\t"))
+                    return;
+
+                enableStuff(false);
+                statusLabel.Content = "Found clipboard-based login data, trying that...";
+                foreach (Match m in devToolsRegex.Matches(clipboard))
+                {
+                    Cookie c = new Cookie();
+                    c.Name = m.Groups[1].Value;
+                    c.Value = m.Groups[2].Value;
+                    c.Domain = ".naver.com";
+                    c.Path = "/";
+                    c.Expires = DateTime.Now.AddMonths(3);
+                    c.HttpOnly = (c.Name == "NID_AUT") ? true : false;
+                    account.Cookies.Add(c);
+                }
+
+                // catch will catch this too
+                await account.GetUserDetails();
+                Close();
+            }
+            catch
+            {
+                statusLabel.Content = "Failed to clipboard login... Ready.";
+                enableStuff(true);
+            }
         }
     }
 }

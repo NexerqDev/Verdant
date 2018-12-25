@@ -20,7 +20,7 @@
         <Label x:Name="captchaLabel" Content="Captcha:" HorizontalAlignment="Left" Height="25" Margin="93,194,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Right" Foreground="White" Visibility="Hidden"/>
         <CheckBox x:Name="rememberBox" Content="Remember last ID" HorizontalAlignment="Left" Height="22" Margin="54,101,0,0" VerticalAlignment="Top" Width="116" Unchecked="rememberBox_Unchecked" TabIndex="4" Foreground="White"/>
         <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,0,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
-        <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="261,70,-6,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
+        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="195,70,0,0" VerticalAlignment="Top" Width="291" FontSize="14" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
         <Button x:Name="refreshCaptchaButton" Content="New Captcha" HorizontalAlignment="Left" Height="26" Margin="342,265,0,0" VerticalAlignment="Top" Width="110" Style="{StaticResource VerdantStyling}" Click="refreshCaptchaButton_Click" Visibility="Hidden"/>
 

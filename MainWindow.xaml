@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Verdant"
         mc:Ignorable="d"
-        Title="Verdant" Height="358.642" Width="541.204" Loaded="Window_Loaded" Icon="verdant.ico" ResizeMode="NoResize">
-    <Grid>
-        <Image HorizontalAlignment="Left" Height="330" VerticalAlignment="Top" Width="535" Stretch="UniformToFill" Source="Resources/natural_space_wallpaper_by_takiidesign-d55v0vn.jpg" OpacityMask="#D8000000"/>
-        <Label x:Name="statusLabel" Content="logged in as:" HorizontalAlignment="Left" Height="39" Margin="248,62,0,0" VerticalAlignment="Top" Width="252" Foreground="White" HorizontalContentAlignment="Right"/>
-        <CheckBox x:Name="autoStartBox" Content="Auto load Verdant to Maple" HorizontalAlignment="Left" Height="20" Margin="171,242,0,0" VerticalAlignment="Top" Width="184" Checked="autoStartBox_Checked" Unchecked="autoStartBox_Checked" Foreground="White"/>
-        <Button x:Name="logoutButton" Content="Logout" HorizontalAlignment="Left" Height="28" Margin="382,280,0,0" VerticalAlignment="Top" Width="125" Click="logoutButton_Click" Style="{StaticResource VerdantStyling}"/>
-        <Label Content="Verdant" HorizontalAlignment="Left" Height="57" Margin="97,23,0,0" VerticalAlignment="Top" Width="143" FontSize="36" Foreground="White"/>
-        <Label Content="Your local Naver PC Game launcher." HorizontalAlignment="Left" Height="30" Margin="101,74,0,0" VerticalAlignment="Top" Width="257" FontSize="14" Foreground="White"/>
-        <Label Content="Games" HorizontalAlignment="Left" Height="35" Margin="221,133,0,0" VerticalAlignment="Top" Width="87" FontSize="22" Foreground="White"/>
+        Title="MapleStory - Verdant" Height="315.15" Width="636.207" Loaded="Window_Loaded" Background="Black" Icon="/Verdant;component/verdant.ico" ResizeMode="NoResize">
 
-        <Border BorderThickness="2" BorderBrush="#FF111111" Margin="225,169,239,90">
-            <Image x:Name="mapleImage" Stretch="UniformToFill" Source="Resources/mslogo.png" MouseUp="mapleImage_MouseUp"/>
-        </Border>
-        <Image x:Name="avatarImage" HorizontalAlignment="Left" Height="55" Margin="452,10,0,0" VerticalAlignment="Top" Width="55" Source="verdant.png"/>
+    <Grid>
+        <Image HorizontalAlignment="Left" Height="285" VerticalAlignment="Top" Width="630" Source="/Verdant;component/Resources/ms-asylum.jpg" Stretch="UniformToFill" OpacityMask="#59000000"/>
+
+        <CheckBox x:Name="exitCheckbox" Content="Exit after launching" HorizontalAlignment="Left" Height="21" Margin="10,249,0,0" VerticalAlignment="Top" Width="234" Checked="exitCheckbox_Checked" Unchecked="exitCheckbox_Checked" Foreground="White"/>
+        <Button x:Name="startButton" Content="GAME START // 게임시작" HorizontalAlignment="Left" Height="47" Margin="416,220,0,0" VerticalAlignment="Top" Width="193" Click="startButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Label x:Name="mapleIdLabel" Content="Web Main Character (대표 캐릭터): " HorizontalAlignment="Left" Height="28" Margin="10,125,0,0" VerticalAlignment="Top" Width="348" Foreground="White"/>
+        <ComboBox x:Name="mapleIdBox" HorizontalAlignment="Left" Height="26" Margin="10,192,0,0" VerticalAlignment="Top" Width="234" IsReadOnly="True" DropDownClosed="mapleIdBox_DropDownClosed" PreviewKeyDown="mapleIdBox_PreviewKeyDown" Style="{StaticResource VerdantStyling}" Foreground="#FF0E0E0E"/>
+        <Button x:Name="changeMapleIdButton" Content="Change Maple ID // 메이플ID 선택" HorizontalAlignment="Left" Height="29" Margin="10,158,0,0" VerticalAlignment="Top" Width="234" Click="changeMapleIdButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Label Content="Verdant" HorizontalAlignment="Left" Height="57" Margin="97,23,0,0" VerticalAlignment="Top" Width="143" FontSize="36" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
+        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="101,74,0,0" VerticalAlignment="Top" Width="309" FontSize="14" Foreground="White"/>
+        <Label x:Name="statusLabel" Content="logged in as:" HorizontalAlignment="Left" Height="39" Margin="357,70,0,0" VerticalAlignment="Top" Width="252" Foreground="White" HorizontalContentAlignment="Right"/>
+        <Image x:Name="avatarImage" HorizontalAlignment="Left" Height="55" Margin="554,10,0,0" VerticalAlignment="Top" Width="55" Source="verdant.png"/>
+        <Button x:Name="logoutButton" Content="Logout" HorizontalAlignment="Left" Height="28" Margin="484,99,0,0" VerticalAlignment="Top" Width="125" Click="logoutButton_Click" Style="{StaticResource VerdantStyling}"/>
+
     </Grid>
 </Window>
