@@ -37,10 +37,10 @@ namespace Verdant
                 return;
             }
 
-            statusLabel.Content = "logged in as: " + Account.Nickname;
+            statusLabel.Content = "Logged in.";
 
-            if (!String.IsNullOrEmpty(Account.AvatarUrl))
-                avatarImage.Source = Tools.UrlToXamlImage(Account.AvatarUrl);
+            //if (!String.IsNullOrEmpty(Account.AvatarUrl))
+            //    avatarImage.Source = Tools.UrlToXamlImage(Account.AvatarUrl);
 
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;

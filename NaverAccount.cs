@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -28,8 +27,6 @@ namespace Verdant
 
         public HttpClient WebClient;
         public NaverKeySet LoginKeys;
-        public string Nickname;
-        public string AvatarUrl;
 
         public CookieContainer Cookies
         {
@@ -249,34 +246,21 @@ namespace Verdant
 
         public class LoginSessionExpiredException : Exception { }
         
-        public async Task GetUserDetails()
+        public async Task EnsureLoggedIn()
         {
-            var req = new HttpRequestMessage()
+            // not the best, but we have to use new to prevent auto 302
+            using (var hch = new HttpClientHandler() { AllowAutoRedirect = false, CookieContainer = Cookies, UseCookies = true })
+            using (var hc = new HttpClient(hch))
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(PROFILE_URL)
-            };
-            req.Headers.Add("Host", "static.nid.naver.com");
-            req.Headers.Add("Referer", "https://my.naver.com/new");
+                var hrm = await hc.GetAsync("https://nid.naver.com/user2/api/route.nhn?m=routePcMyInfo");
+                if (hrm.StatusCode != HttpStatusCode.Redirect)
+                    throw new Exception("wtf");
 
-            HttpResponseMessage res = await WebClient.SendAsync(req);
+                if (hrm.Headers.Location.OriginalString.Contains("nidlogin.login"))
+                    throw new LoginSessionExpiredException();
 
-            string rawData = await res.Content.ReadAsStringAsync();
-            if (rawData.Contains("Failure"))
-            {
-                LoggedIn = false;
-                throw new LoginSessionExpiredException();
+                LoggedIn = true;
             }
-
-            res.EnsureSuccessStatusCode();
-            dynamic data = JObject.Parse(rawData);
-
-            Nickname = data["nick_name"];
-            AvatarUrl = data["image_url"];
-
-            //await WebClient.GetAsync("https://game.naver.com/");
-            //SaveCookies();
-            LoggedIn = true;
         }
 
         private Regex otpKeyRegex = new Regex("id=\"key\" name=\"key\" value=\"(.*?)\"");

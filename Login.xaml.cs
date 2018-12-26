@@ -42,7 +42,7 @@ namespace Verdant
             {
                 if (account.Preloaded)
                 {
-                    await account.GetUserDetails();
+                    await account.EnsureLoggedIn();
                     Close();
                     return;
                 }
@@ -152,7 +152,7 @@ namespace Verdant
                 doingOtp = false;
             }
 
-            await account.GetUserDetails();
+            await account.EnsureLoggedIn();
             mainWindow.Account = account;
 
             if ((bool)rememberBox.IsChecked)
@@ -243,7 +243,7 @@ namespace Verdant
                 }
 
                 // catch will catch this too
-                await account.GetUserDetails();
+                await account.EnsureLoggedIn();
                 Close();
             }
             catch
