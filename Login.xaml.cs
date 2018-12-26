@@ -40,7 +40,7 @@ namespace Verdant
 
             try
             {
-                if (File.Exists(mainWindow.PathToCookies))
+                if (account.Preloaded)
                 {
                     await account.GetUserDetails();
                     Close();
@@ -52,6 +52,7 @@ namespace Verdant
                 // session invalid.
                 // just continue on down
                 MessageBox.Show("Your Naver login has expired. Please login again.");
+                File.Delete(mainWindow.PathToCookies);
             }
             catch (Exception e)
             {

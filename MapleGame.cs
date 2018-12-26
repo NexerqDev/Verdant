@@ -45,6 +45,12 @@ namespace Verdant
             // NOTE: make sure if >1 maple id, there is one selected as default on the website!!
             // Or will not channel properly!!
             Debug.WriteLine("getting maple");
+            if (Account.Preloaded) // sometimes we just need to get the new cookies and not a full channel is required
+            {
+                Debug.WriteLine("preload, so trying loginproc first");
+                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?redirect=https%3a%2f%2fmaplestory.nexon.game.naver.com%2f&gamecode=589824");
+            }
+
             if (!(await getCurrentMaple()))
                 throw new ChannelingRequiredException();
         }

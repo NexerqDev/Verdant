@@ -42,6 +42,7 @@ namespace Verdant
         public bool LoggedIn = false;
         public string CaptchaImageUrl => $"https://nid.naver.com/login/image/captcha/nhncaptchav4.gif?key={CaptchaKey}&1";
         public string CaptchaKey;
+        public bool Preloaded = false;
 
         public NaverAccount(string pathToSavedCookies = null)
         {
@@ -55,6 +56,7 @@ namespace Verdant
                     {
                         var f = new BinaryFormatter();
                         cc = (CookieContainer)f.Deserialize(s);
+                        Preloaded = true;
                     }
                 }
                 catch
@@ -255,7 +257,7 @@ namespace Verdant
                 RequestUri = new Uri(PROFILE_URL)
             };
             req.Headers.Add("Host", "static.nid.naver.com");
-            req.Headers.Add("Referer", "https://my.naver.com/");
+            req.Headers.Add("Referer", "https://my.naver.com/new");
 
             HttpResponseMessage res = await WebClient.SendAsync(req);
 
@@ -272,8 +274,8 @@ namespace Verdant
             Nickname = data["nick_name"];
             AvatarUrl = data["image_url"];
 
-            await WebClient.GetAsync("https://game.naver.com/");
-            SaveCookies();
+            //await WebClient.GetAsync("https://game.naver.com/");
+            //SaveCookies();
             LoggedIn = true;
         }
 
