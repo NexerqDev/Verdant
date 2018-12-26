@@ -21,6 +21,7 @@
         <Label x:Name="statusLabel" Content="logged in as:" HorizontalAlignment="Left" Height="39" Margin="357,70,0,0" VerticalAlignment="Top" Width="252" Foreground="White" HorizontalContentAlignment="Right"/>
         <Image x:Name="avatarImage" HorizontalAlignment="Left" Height="55" Margin="554,10,0,0" VerticalAlignment="Top" Width="55" Source="verdant.png"/>
         <Button x:Name="logoutButton" Content="Logout" HorizontalAlignment="Left" Height="28" Margin="484,99,0,0" VerticalAlignment="Top" Width="125" Click="logoutButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Image x:Name="charImage" HorizontalAlignment="Left" Height="62" Margin="265,158,0,0" VerticalAlignment="Top" Width="62" Stretch="UniformToFill"/>
 
     </Grid>
 </Window>

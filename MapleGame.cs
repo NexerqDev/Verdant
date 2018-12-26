@@ -15,6 +15,7 @@ namespace Verdant
         public NaverAccount Account;
         public string MainCharName;
         public List<string> MapleIds;
+        public string CharacterImageUrl = null;
 
         private string ngmPath;
         private string launchWID;
@@ -111,6 +112,7 @@ namespace Verdant
 
         private Regex charRepRegex = new Regex("<dd class=\"login_id\"><a href=\".+?\" target=\"_blank\">(.+?)님<\\/a><\\/dd>");
         private Regex launchWIDRegex = new Regex("PLATFORM\\.LaunchGame\\('(\\d+)'\\)");
+        private Regex charImgRegex = new Regex("<img src=\"(.*?)\" alt=\"대표캐릭터이미지\"");
         private async Task<bool> getCurrentMaple()
         {
             HttpResponseMessage res = await webClient.GetAsync("http://maplestory.nexon.game.naver.com");
@@ -130,6 +132,11 @@ namespace Verdant
             MainCharName = "(Unknown)";
             if (m.Success)
                 MainCharName = m.Groups[1].Value;
+
+            Match imgM = charImgRegex.Match(data);
+            if (imgM.Success)
+                CharacterImageUrl = imgM.Groups[1].Value;
+
             return true;
         }
 

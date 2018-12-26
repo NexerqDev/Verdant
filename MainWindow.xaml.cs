@@ -40,13 +40,7 @@ namespace Verdant
             statusLabel.Content = "logged in as: " + Account.Nickname;
 
             if (!String.IsNullOrEmpty(Account.AvatarUrl))
-            {
-                BitmapImage bi = new BitmapImage();
-                bi.BeginInit();
-                bi.UriSource = new Uri(Account.AvatarUrl, UriKind.Absolute);
-                bi.EndInit();
-                avatarImage.Source = bi;
-            }
+                avatarImage.Source = Tools.UrlToXamlImage(Account.AvatarUrl);
 
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;
@@ -103,6 +97,10 @@ namespace Verdant
             }
 
             mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
+
+            if (Maple.CharacterImageUrl != null)
+                charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
+
             changeMapleIdButton.IsEnabled = true;
             startButton.IsEnabled = true;
 
@@ -152,6 +150,7 @@ namespace Verdant
             if (mapleIdBox.Text == Maple.MainCharName)
                 return;
 
+            charImage.Source = null;
             mapleIdBox.IsEnabled = false;
             mapleIdLabel.Content = "Switching...";
 
@@ -164,7 +163,9 @@ namespace Verdant
                 MessageBox.Show("Error swiching IDs...\n\n" + ex.ToString());
             }
 
-            mapleIdLabel.Content = "Maple ID (메이플ID): " + Maple.MainCharName;
+            mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
+            if (Maple.CharacterImageUrl != null)
+                charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
             mapleIdBox.IsEnabled = true;
         }
 
