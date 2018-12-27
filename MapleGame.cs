@@ -12,6 +12,9 @@ namespace Verdant
 {
     public class MapleGame
     {
+        // Note to self: We use the /CashShop URL because if there is an event page on the home page, we want a reliable page to get
+        // Otherwise, it may redirect to an update page
+
         public NaverAccount Account;
         public string MainCharName;
         public List<string> MapleIds;
@@ -49,7 +52,7 @@ namespace Verdant
             if (Account.Preloaded) // sometimes we just need to get the new cookies and not a full channel is required
             {
                 Debug.WriteLine("preload, so trying loginproc first");
-                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?redirect=https%3a%2f%2fmaplestory.nexon.game.naver.com%2f&gamecode=589824");
+                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?redirect=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FNews%2FCashShop&gamecode=589824");
             }
 
             if (!(await getCurrentMaple()))
@@ -88,7 +91,7 @@ namespace Verdant
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/authentication/swk?h="),
                 Content = null
             };
-            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
+            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
 
             var res = await webClient.SendAsync(req);
@@ -107,15 +110,15 @@ namespace Verdant
         private async Task channeling()
         {
             await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046"); // redirs a few times for cookies
-            await webClient.GetAsync("http://maplestory.nexon.game.naver.com"); // the home page may redirect too
+            await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop"); // the home page may redirect too
         }
 
-        private Regex charRepRegex = new Regex("<dd class=\"login_id\"><a href=\".+?\" target=\"_blank\">(.+?)님<\\/a><\\/dd>");
+        private Regex charRepRegex = new Regex("<dd class=\"login_charname\">\\s+<a href=\".+?\" target=\"_blank\">(.+?)님<\\/a>\\s+<\\/dd>");
         private Regex launchWIDRegex = new Regex("PLATFORM\\.LaunchGame\\('(\\d+)'\\)");
-        private Regex charImgRegex = new Regex("<img src=\"(.*?)\" alt=\"대표캐릭터이미지\"");
+        private Regex charImgRegex = new Regex("<span class=\"login_char\"><img src=\"(.*?)\" onerror=");
         private async Task<bool> getCurrentMaple()
         {
-            HttpResponseMessage res = await webClient.GetAsync("http://maplestory.nexon.game.naver.com");
+            HttpResponseMessage res = await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop");
             res.EnsureSuccessStatusCode();
 
             string data = await res.Content.ReadAsStringAsync();
@@ -135,7 +138,7 @@ namespace Verdant
 
             Match imgM = charImgRegex.Match(data);
             if (imgM.Success)
-                CharacterImageUrl = imgM.Groups[1].Value;
+                CharacterImageUrl = imgM.Groups[1].Value.Replace("/180", "");
 
             return true;
         }
@@ -148,7 +151,7 @@ namespace Verdant
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/IDList")
             };
-            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
+            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
 
             HttpResponseMessage res = await webClient.SendAsync(req);
@@ -167,7 +170,7 @@ namespace Verdant
             {
                 { "id", mapleId },
                 { "master", "0" },
-                { "redirectTo", "https://maplestory.nexon.game.naver.com/" }
+                { "redirectTo", "https://maplestory.nexon.game.naver.com/News/CashShop" }
             };
             var postData = new FormUrlEncodedContent(_postData);
 
@@ -177,7 +180,7 @@ namespace Verdant
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/ChangeID")
             };
             req.Content = postData;
-            req.Headers.Add("Referer", "http://maplestory.nexon.game.naver.com/");
+            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
             HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
 
