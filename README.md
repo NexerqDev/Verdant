@@ -30,7 +30,7 @@ If you do find this program useful, please consider leaving it a [star](https://
 ### Alternate Login Method
 Since Naver's CAPTCHA as mentioned above is super hard to actually get right, I developed this quick way to login (you shouldn't need to login very often anyway, I hope...)
 
-1. Make sure you are logged in to Naver in Chrome (only supported, other browsers haven't tested).
+1. Make sure you are logged in to Naver in Chrome (only supported, other browsers haven't tested). When logging in, be sure to have **Stay Signed in ticked** so the session actually lasts!
 1. Go to the Naver homepage (http://naver.com).
 1. Press F12 to open the DevTools.
 1. Go to the Application tab, open Cookies and go into the "www.naver.com" section.
