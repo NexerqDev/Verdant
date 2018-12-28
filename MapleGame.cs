@@ -142,6 +142,7 @@ namespace Verdant
             if (m.Success)
                 MainCharName = m.Groups[1].Value;
 
+            CharacterImageUrl = null;
             Match imgM = charImgRegex.Match(data);
             if (imgM.Success)
                 CharacterImageUrl = imgM.Groups[1].Value.Replace("/180", "");
