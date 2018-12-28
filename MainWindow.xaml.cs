@@ -22,7 +22,6 @@ namespace Verdant
 
         public NaverAccount Account = null;
         public MapleGame Maple;
-        public bool ToExit = false;
 
         public MainWindow()
         {
@@ -45,7 +44,6 @@ namespace Verdant
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;
             startButton.IsEnabled = false;
-            exitCheckbox.IsEnabled = false;
         }
 
         bool loaded = false;
@@ -103,9 +101,6 @@ namespace Verdant
 
             changeMapleIdButton.IsEnabled = true;
             startButton.IsEnabled = true;
-
-            exitCheckbox.IsEnabled = true;
-            exitCheckbox.IsChecked = Properties.Settings.Default.autoMapleExit;
             loaded = true;
         }
 
@@ -121,9 +116,6 @@ namespace Verdant
             {
                 MessageBox.Show("Error starting game...\n\n" + ex.ToString());
             }
-
-            if ((bool)exitCheckbox.IsChecked)
-                ToExit = true;
 
             Close();
         }
@@ -178,14 +170,6 @@ namespace Verdant
                 return; // do not call the base class method OnPreviewKeyDown()
             }
             base.OnPreviewKeyDown(e);
-        }
-
-        private void exitCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            if (!loaded)
-                return;
-            Properties.Settings.Default.autoMapleExit = (bool)exitCheckbox.IsChecked;
-            Properties.Settings.Default.Save();
         }
 
         private void logoutButton_Click(object sender, RoutedEventArgs e)

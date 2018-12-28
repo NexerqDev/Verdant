@@ -25,18 +25,6 @@ namespace Verdant.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool autoMapleStart {
-            get {
-                return ((bool)(this["autoMapleStart"]));
-            }
-            set {
-                this["autoMapleStart"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string naverId {
             get {
@@ -44,18 +32,6 @@ namespace Verdant.Properties {
             }
             set {
                 this["naverId"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool autoMapleExit {
-            get {
-                return ((bool)(this["autoMapleExit"]));
-            }
-            set {
-                this["autoMapleExit"] = value;
             }
         }
     }
