@@ -49,12 +49,6 @@ namespace Verdant
             // NOTE: make sure if >1 maple id, there is one selected as default on the website!!
             // Or will not channel properly!!
             Debug.WriteLine("getting maple");
-            if (Account.Preloaded) // sometimes we just need to get the new cookies and not a full channel is required
-            {
-                Debug.WriteLine("preload, so trying loginproc first");
-                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?redirect=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FNews%2FCashShop&gamecode=589824");
-            }
-
             if (!(await getCurrentMaple()))
                 throw new ChannelingRequiredException();
         }
@@ -72,7 +66,7 @@ namespace Verdant
         }
 
         private const string LAUNCH_LINE = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:{1}' -passarg:'WebStart' -timestamp:{2} -position:'GameWeb|https://maplestory.nexon.game.naver.com/' -service:6";
-        public async Task Start()
+        public async Task Start(bool firstTry = true)
         {
             // last minute cookies need to be get here - MSGENC and what not
             int ts = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // timestamp: https://stackoverflow.com/questions/17632584/how-to-get-the-unix-timestamp-in-c-sharp
@@ -96,8 +90,20 @@ namespace Verdant
 
             var res = await webClient.SendAsync(req);
             string data = await res.Content.ReadAsStringAsync();
+            Debug.WriteLine(data);
             if (!data.Contains("\"Code\":1"))
+            {
+                if (firstTry && Account.Preloaded)
+                {
+                    Debug.WriteLine("preload, so trying loginproc to update sess");
+                    await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/logout.aspx?gamecode=589824");
+                    await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
+                    // hard retry
+                    await Start(false);
+                    return;
+                }
                 throw new Exception("could not auth for game...");
+            }
 
             string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))["MSGENC"].Value;
 
