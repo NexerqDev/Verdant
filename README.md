@@ -12,7 +12,7 @@
 
 *[looking for a GMS launcher without Nexon Launcher? Check my other project [Xenon](https://github.com/NexerqDev/Xenon) out!]*
 
-![Verdant preview](preview.jpg)
+![Verdant preview](https://miku.s-ul.eu/FlaXG4E6.png)
 
 </div>
 
