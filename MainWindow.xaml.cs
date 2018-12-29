@@ -29,24 +29,25 @@ namespace Verdant
 
             Account = new NaverAccount(PathToCookies);
 
-            (new Login(this)).ShowDialog();
-            if (!Account.LoggedIn)
-            {
-                Application.Current.Shutdown();
-                return;
-            }
-
-            statusLabel.Content = "Logged in.";
-
-            //if (!String.IsNullOrEmpty(Account.AvatarUrl))
-            //    avatarImage.Source = Tools.UrlToXamlImage(Account.AvatarUrl);
-
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;
             startButton.IsEnabled = false;
         }
 
-        bool loaded = false;
+        private async Task checkAccountLogin()
+        {
+            try
+            {
+                await Account.EnsureLoggedIn();
+            }
+            catch (NaverAccount.LoginSessionExpiredException)
+            {
+                // session invalid.
+                MessageBox.Show("Your Naver login has expired. A new login is required.");
+                File.Delete(PathToCookies);
+            }
+        }
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if (Process.GetProcessesByName("MapleStory").Length > 0
@@ -61,6 +62,31 @@ namespace Verdant
             }
 
             mapleIdLabel.Content = "Loading...";
+
+
+            // NAVER LOGIN
+            // check for preexist login data, and verify if session still valid
+            // or, if new, show the dialog!
+            // we need to run the async function synchronously - not the greatest but we'll just do this for now
+            if (Account.Preloaded)
+            {
+                await checkAccountLogin();
+                if (!Account.LoggedIn)
+                    (new LoginNew(Account)).ShowDialog();
+            }
+            else
+                (new LoginNew(Account)).ShowDialog();
+
+            if (!Account.LoggedIn)
+            {
+                Close();
+                return;
+            }
+
+            statusLabel.Content = "Logged in.";
+
+
+            // MAPLE LOGIN/CHANNEL
             Maple = new MapleGame(Account);
 
             try
@@ -101,7 +127,6 @@ namespace Verdant
 
             changeMapleIdButton.IsEnabled = true;
             startButton.IsEnabled = true;
-            loaded = true;
         }
 
         private async void startButton_Click(object sender, RoutedEventArgs e)
