@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,15 +62,7 @@ namespace Verdant
                 foreach (string s in cookies.Split(new string[] { "; " }, StringSplitOptions.None))
                 {
                     string[] ss = s.Split('=');
-
-                    Cookie c = new Cookie();
-                    c.Name = ss[0];
-                    c.Value = ss[1];
-                    c.Domain = ".naver.com";
-                    c.Path = "/";
-                    c.Expires = DateTime.Now.AddMonths(3);
-                    c.HttpOnly = (c.Name == "NID_AUT") ? true : false;
-                    account.Cookies.Add(c);
+                    addNaverCookieData(ss[0], ss[1]);
                 }
 
                 Task.Run(() => account.EnsureLoggedIn()).Wait();
@@ -81,6 +74,51 @@ namespace Verdant
         private void resetButton_Click(object sender, RoutedEventArgs e)
         {
             webBrowser.Navigate("https://nid.naver.com/nidlogin.login?mode=form&url=https://blog.naver.com/nexerq");
+        }
+
+        private void addNaverCookieData(string name, string value)
+        {
+            Cookie c = new Cookie();
+            c.Name = name;
+            c.Value = value;
+            c.Domain = ".naver.com";
+            c.Path = "/";
+            c.Expires = DateTime.Now.AddMonths(3);
+            c.HttpOnly = (c.Name == "NID_AUT") ? true : false;
+            account.Cookies.Add(c);
+        }
+
+        Regex devToolsRegex = new Regex("^(.*?)\\t(.*?)\\t", RegexOptions.Multiline);
+        private async void tryClipboardLogin()
+        {
+            // clipboard cookie based login - fuck naver's absolutely terrible captcha, and cbs working out how bvsd works! :)
+            // we have to use dev tools copy paste though because NID_AUT is httponly, so cant just use document.cookie :(
+            try
+            {
+                string clipboard = Clipboard.GetText(TextDataFormat.Text);
+                if (!clipboard.Contains("NID_AUT\t"))
+                    return;
+
+                var mbr = MessageBox.Show("Found what looks like Chrome devtools cookies clipboard data to login with. Use it?", "Verdant", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (mbr == MessageBoxResult.No)
+                    return;
+
+                foreach (Match m in devToolsRegex.Matches(clipboard))
+                    addNaverCookieData(m.Groups[1].Value, m.Groups[2].Value);
+
+                // catch will catch this too
+                await account.EnsureLoggedIn();
+                Close();
+            }
+            catch
+            {
+                MessageBox.Show("Clipboard login failed.", "Verdant", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            tryClipboardLogin();
         }
     }
 }

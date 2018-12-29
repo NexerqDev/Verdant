@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Verdant"
         mc:Ignorable="d"
-        Title="Verdant - Login" Height="566.02" Width="527.185" ResizeMode="NoResize">
+        Title="Verdant - Login" Height="566.02" Width="527.185" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
         <Image HorizontalAlignment="Left" Height="537" VerticalAlignment="Top" Width="521" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
 
