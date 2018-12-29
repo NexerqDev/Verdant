@@ -101,6 +101,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -115,12 +116,6 @@
     <Resource Include="Resources\ms-asylum.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\mslogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\natural_space_wallpaper_by_takiidesign-d55v0vn.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\68983602-network-wallpapers.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="verdant.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\ms-logo-leaf.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

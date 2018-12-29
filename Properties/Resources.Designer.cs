@@ -83,36 +83,6 @@ namespace Verdant.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ms_logo_leaf {
-            get {
-                object obj = ResourceManager.GetObject("ms_logo_leaf", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap mslogo {
-            get {
-                object obj = ResourceManager.GetObject("mslogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap natural_space_wallpaper_by_takiidesign_d55v0vn {
-            get {
-                object obj = ResourceManager.GetObject("natural_space_wallpaper_by_takiidesign_d55v0vn", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap verdant {
             get {
                 object obj = ResourceManager.GetObject("verdant", resourceCulture);
