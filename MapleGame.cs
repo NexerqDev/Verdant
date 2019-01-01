@@ -98,6 +98,7 @@ namespace Verdant
                     Debug.WriteLine("preload, so trying loginproc to update sess");
                     await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/logout.aspx?gamecode=589824");
                     await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
+                    Account.SaveCookies();
                     // hard retry
                     await Start(false);
                     return;
