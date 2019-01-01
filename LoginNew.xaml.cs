@@ -103,16 +103,19 @@ namespace Verdant
                 if (mbr == MessageBoxResult.No)
                     return;
 
+                webBrowser.IsEnabled = false;
                 foreach (Match m in devToolsRegex.Matches(clipboard))
                     addNaverCookieData(m.Groups[1].Value, m.Groups[2].Value);
 
                 // catch will catch this too
                 await account.EnsureLoggedIn();
+                account.SaveCookies();
                 Close();
             }
             catch
             {
                 MessageBox.Show("Clipboard login failed.", "Verdant", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                webBrowser.IsEnabled = true;
             }
         }
 

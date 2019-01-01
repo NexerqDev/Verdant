@@ -7,8 +7,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Verdant")]
-[assembly: AssemblyDescription("Naver PC Game Launcher")]
+[assembly: AssemblyTitle("Verdant (베르단트)")]
+[assembly: AssemblyDescription("MapleStory for Naver PC Game Launcher (오픈소스 메이플스토리 네이버 채널링 게임런처)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NexerqDev")]
 [assembly: AssemblyProduct("Verdant")]
@@ -52,4 +52,4 @@ using System.Windows;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.2.1.1")]
+[assembly: AssemblyFileVersion("0.3.0.0")]

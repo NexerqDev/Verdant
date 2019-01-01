@@ -8,7 +8,7 @@
 
 *An open-source game launcher for Naver Channeling Korean Maplestory players.*
 
-*(오픈소스 메이플스토리 네이버 채널링 게임런처)*
+*(베르단트: 오픈소스 메이플스토리 네이버 채널링 게임런처)*
 
 *[looking for a GMS launcher without Nexon Launcher? Check my other project [Xenon](https://github.com/NexerqDev/Xenon) out!]*
 
