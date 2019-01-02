@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Verdant"
         mc:Ignorable="d"
-        Title="Verdant - Login" Height="566.02" Width="527.185" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="Verdant - Login" Height="717.52" Width="527.185" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
-        <Image HorizontalAlignment="Left" Height="537" VerticalAlignment="Top" Width="521" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
+        <Image HorizontalAlignment="Left" Height="692" VerticalAlignment="Top" Width="521" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
 
         <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,-160,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
-        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="195,70,-194,0" VerticalAlignment="Top" Width="291" FontSize="14" Foreground="White"/>
+        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="220,3,0,0" VerticalAlignment="Top" Width="291" FontSize="14" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
-        <WebBrowser x:Name="webBrowser" HorizontalAlignment="Left" Height="356" Margin="10,159,0,0" VerticalAlignment="Top" Width="492" Navigating="webBrowser_Navigating" LoadCompleted="webBrowser_LoadCompleted"/>
-        <Button x:Name="resetButton" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="400,126,0,0" VerticalAlignment="Top" Width="102" Click="resetButton_Click"/>
-        <Label Content="Please login below, and ensure &quot;Stay signed in&quot; is checked!" HorizontalAlignment="Left" Height="30" Margin="10,124,0,0" VerticalAlignment="Top" Width="385" FontSize="14" Foreground="#FF00FF3A"/>
+        <WebBrowser x:Name="webBrowser" HorizontalAlignment="Left" Height="538" Margin="10,117,0,0" VerticalAlignment="Top" Width="480" Navigating="webBrowser_Navigating" LoadCompleted="webBrowser_LoadCompleted"/>
+        <Button x:Name="resetButton" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="400,82,0,0" VerticalAlignment="Top" Width="102" Click="resetButton_Click"/>
+        <Label Content="Please login below, and ensure &quot;Stay signed in&quot; is checked!" HorizontalAlignment="Left" Height="30" Margin="10,82,0,0" VerticalAlignment="Top" Width="385" FontSize="14" Foreground="#FF00FF3A"/>
 
     </Grid>
 </Window>
