@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using mshtml;
 
 namespace Verdant
 {
@@ -122,6 +123,18 @@ namespace Verdant
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tryClipboardLogin();
+        }
+
+        private void webBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            // QOL: tick the stay signed in automatically
+            if (e.Uri.AbsoluteUri.Contains("/nidlogin.login"))
+            {
+                var document = (HTMLDocument)webBrowser.Document;
+                IHTMLElement staySignedIn = document.getElementById("login_chk");
+                if (staySignedIn != null)
+                    staySignedIn.click();
+            }
         }
     }
 }
