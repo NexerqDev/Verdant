@@ -22,7 +22,11 @@ namespace Verdant
     /// </summary>
     public partial class LoginNew : Window
     {
+        private const string LOGIN_URL = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=cg0ndg44OpLiP6nVXIsc&redirect_uri=http://nexerq.cf";
+
         private NaverAccount account;
+
+        private HTMLDocument webDocument => (HTMLDocument)webBrowser.Document;
 
         public LoginNew(NaverAccount account)
         {
@@ -30,13 +34,15 @@ namespace Verdant
 
             this.account = account;
 
-            // we specifically use this url redirect so we know when auth success
-            webBrowser.Navigate("https://nid.naver.com/nidlogin.login?mode=form&url=https://blog.naver.com/nexerq");
+            Tools.ForceClearNaverIE(); // we do this anyway
+
+            // "nicer" url? - Login to Verdant :)
+            webBrowser.Navigate(LOGIN_URL);
         }
 
         private void webBrowser_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            if (e.Uri.AbsoluteUri == "https://blog.naver.com/nexerq")
+            if (e.Uri.AbsoluteUri.Contains("oauth_token="))
             {
                 // check if auth really success
                 e.Cancel = true;
@@ -74,7 +80,8 @@ namespace Verdant
 
         private void resetButton_Click(object sender, RoutedEventArgs e)
         {
-            webBrowser.Navigate("https://nid.naver.com/nidlogin.login?mode=form&url=https://blog.naver.com/nexerq");
+            Tools.ForceClearNaverIE();
+            webBrowser.Navigate(LOGIN_URL);
         }
 
         private void addNaverCookieData(string name, string value)
@@ -128,10 +135,9 @@ namespace Verdant
         private void webBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             // QOL: tick the stay signed in automatically
-            if (e.Uri.AbsoluteUri.Contains("/nidlogin.login"))
+            if (e.Uri.AbsoluteUri.Contains("oauth2.0/authorize"))
             {
-                var document = (HTMLDocument)webBrowser.Document;
-                IHTMLElement staySignedIn = document.getElementById("login_chk");
+                IHTMLElement staySignedIn = webDocument.getElementById("login_chk");
                 if (staySignedIn != null)
                     staySignedIn.click();
             }

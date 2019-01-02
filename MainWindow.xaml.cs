@@ -206,6 +206,8 @@ namespace Verdant
             }
             catch { }
 
+            Tools.ForceClearNaverIE();
+
             File.Delete(PathToCookies);
             MessageBox.Show("Logged out. Please restart Verdant if you wish to relogin.");
             Application.Current.Shutdown();

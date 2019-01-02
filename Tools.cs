@@ -22,7 +22,7 @@ namespace Verdant
 
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool InternetGetCookieEx(string pchURL, string pchCookieName, StringBuilder pchCookieData, ref uint pcchCookieData, int dwFlags, IntPtr lpReserved);
-        private const int INTERNET_COOKIE_HTTPONLY = 0x00002000;
+        public const int INTERNET_COOKIE_HTTPONLY = 0x00002000;
         public static string GetCookieStringData(string cookieUri)
         {
             uint datasize = 1024;
@@ -35,6 +35,14 @@ namespace Verdant
             {
                 return null;
             }
+        }
+
+        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool InternetSetCookieEx(string lpszUrlName, string lpszCookieName, string lpszCookieData, uint dwFlags, IntPtr dwReserved);
+
+        public static void ForceClearNaverIE()
+        {
+            InternetSetCookieEx("https://naver.com/", "NID_AUT", "", Tools.INTERNET_COOKIE_HTTPONLY, IntPtr.Zero);
         }
     }
 }
