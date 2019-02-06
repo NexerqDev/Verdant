@@ -120,9 +120,9 @@ namespace Verdant
             await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop"); // the home page may redirect too
         }
 
-        private Regex charRepRegex = new Regex("<dd class=\"login_charname\">\\s+<a href=\".+?\" target=\"_blank\">(.+?)님<\\/a>\\s+<\\/dd>");
+        private Regex charRepRegex = new Regex("<span class=\"sub_user_name\">(.+?)</span>");
         private Regex launchWIDRegex = new Regex("PLATFORM\\.LaunchGame\\('(\\d+)'\\)");
-        private Regex charImgRegex = new Regex("<span class=\"login_char\"><img src=\"(.*?)\" onerror=");
+        private Regex charImgRegex = new Regex("<span class=\"sub_login_char\"><img src=\"(.+?)\" onerror=");
         private async Task<bool> getCurrentMaple()
         {
             HttpResponseMessage res = await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop");
