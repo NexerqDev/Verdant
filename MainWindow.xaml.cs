@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -50,17 +51,6 @@ namespace Verdant
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Process.GetProcessesByName("MapleStory").Length > 0
-             || Process.GetProcessesByName("NGM").Length > 0)
-            {
-                var mbr = MessageBox.Show("You are already playing MapleStory! Continue?", "Verdant", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
-                if (mbr == MessageBoxResult.No)
-                {
-                    Close();
-                    return;
-                }
-            }
-
             mapleIdLabel.Content = "Loading...";
 
 
@@ -86,7 +76,36 @@ namespace Verdant
             statusLabel.Content = "Logged in.";
 
 
+
+            // check for a custom form
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1 && args[1].EndsWith(".dll"))
+            {
+                Assembly asm = Assembly.LoadFile(args[1]);
+                Type t = asm.GetExportedTypes().First(a => typeof(Window).IsAssignableFrom(a));
+
+                Window w = (Window)Activator.CreateInstance(t, Account);
+                w.Title += " (powered by Verdant)";
+
+                w.Show();
+                Close();
+                return;
+            }
+
+
+
             // MAPLE LOGIN/CHANNEL
+            if (Process.GetProcessesByName("MapleStory").Length > 0
+             || Process.GetProcessesByName("NGM").Length > 0)
+            {
+                var mbr = MessageBox.Show("You are already playing MapleStory! Continue?", "Verdant", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (mbr == MessageBoxResult.No)
+                {
+                    Close();
+                    return;
+                }
+            }
+
             Maple = new MapleGame(Account);
 
             try
