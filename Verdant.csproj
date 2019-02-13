@@ -69,6 +69,7 @@
       <DependentUpon>LoginNew.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
+    <Compile Include="VerdantException.cs" />
     <Page Include="LoginNew.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

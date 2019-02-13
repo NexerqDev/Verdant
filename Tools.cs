@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -18,6 +19,18 @@ namespace Verdant
             bi.UriSource = new Uri(url, UriKind.Absolute);
             bi.EndInit();
             return bi;
+        }
+
+        public static string GetNgmPath()
+        {
+            using (var reg = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)) // 32bit reg
+            using (RegistryKey key = reg.OpenSubKey("Software\\Nexon\\Shared", false))
+            {
+                if (key == null)
+                    return null;
+
+                return key.GetValue(null).ToString() + @"\NGM\NGM.exe";
+            }
         }
 
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]

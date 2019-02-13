@@ -95,5 +95,28 @@ namespace Verdant
                 LoggedIn = true;
             }
         }
+
+        public void Logout()
+        {
+            try
+            {
+                // run synchronously
+                var r = WebClient.GetAsync("http://static.nid.naver.com/sso/logout.nhn?return_url=https%3A%2F%2Fwww.naver.com%2F").Result;
+            }
+            catch { }
+            File.Delete(pathToSavedCookies);
+        }
+
+        /// <summary>
+        /// UI logout: includes message box, IE cookie clear and hard quits the app. Use just Logout() for a soft logout.
+        /// </summary>
+        public void UiLogout()
+        {
+            Logout();
+            Tools.ForceClearNaverIE();
+
+            System.Windows.MessageBox.Show("Logged out. Please restart Verdant if you wish to relogin.");
+            Environment.Exit(0);
+        }
     }
 }

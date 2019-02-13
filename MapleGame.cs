@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -30,27 +29,19 @@ namespace Verdant
             Account = account;
         }
 
-        public class MapleNotFoundException : Exception { }
-        public class ChannelingRequiredException : Exception { }
-
         public async Task Init()
         {
             // Find NGM location
-            using (var reg = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)) // 32bit reg
-            using (RegistryKey key = reg.OpenSubKey("Software\\Nexon\\Shared", false))
-            {
-                if (key == null)
-                    throw new MapleNotFoundException();
-
-                ngmPath = key.GetValue(null).ToString() + @"\NGM\NGM.exe";
-            }
+            ngmPath = Tools.GetNgmPath();
+            if (ngmPath == null)
+                throw new VerdantException.GameNotFoundException();
 
             // Get front page, if no load, then channel and try again. If not then gg
             // NOTE: make sure if >1 maple id, there is one selected as default on the website!!
             // Or will not channel properly!!
             Debug.WriteLine("getting maple");
             if (!(await getCurrentMaple()))
-                throw new ChannelingRequiredException();
+                throw new VerdantException.ChannelingRequiredException();
         }
 
         public async Task Channel()
