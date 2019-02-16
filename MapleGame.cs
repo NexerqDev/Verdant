@@ -91,7 +91,13 @@ namespace Verdant
             var res = await webClient.SendAsync(req);
             string data = await res.Content.ReadAsStringAsync();
             Debug.WriteLine(data);
-            if (!data.Contains("\"Code\":1"))
+			if(data.Contains("\"Code\":5"))
+			{
+				//"session expired try logging in again"
+				Debug.WriteLine("relogging expired session and crossing fingers");
+                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
+			}
+            else if (!data.Contains("\"Code\":1"))
             {
                 if (firstTry && Account.Preloaded)
                 {
