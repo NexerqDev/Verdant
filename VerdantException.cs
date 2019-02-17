@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Verdant
 {
-    class VerdantException
+    public class VerdantException
     {
         public class GameNotFoundException : Exception { }
         public class ChannelingRequiredException : Exception { }

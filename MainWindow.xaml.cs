@@ -81,7 +81,7 @@ namespace Verdant
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1 && args[1].EndsWith(".dll"))
             {
-                Assembly asm = Assembly.LoadFile(args[1]);
+                Assembly asm = Assembly.LoadFile(Path.GetFullPath(args[1]));
                 Type t = asm.GetExportedTypes().First(a => typeof(Window).IsAssignableFrom(a));
 
                 Window w = (Window)Activator.CreateInstance(t, Account);
