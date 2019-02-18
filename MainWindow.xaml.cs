@@ -33,6 +33,8 @@ namespace Verdant
             mapleIdBox.IsEnabled = false;
             changeMapleIdButton.IsEnabled = false;
             startButton.IsEnabled = false;
+
+            Tools.TryPromptUpdate();
         }
 
         private async Task checkAccountLogin()

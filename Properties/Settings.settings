@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Verdant.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="naverId" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="ignoredUpdate" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
