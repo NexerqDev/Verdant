@@ -24,17 +24,23 @@ namespace Verdant
         public NaverAccount Account = null;
         public MapleGame Maple;
 
+        private bool otherIdsLoaded = false;
+
         public MainWindow()
         {
             InitializeComponent();
 
             Account = new NaverAccount(PathToCookies);
 
-            mapleIdBox.IsEnabled = false;
-            changeMapleIdButton.IsEnabled = false;
-            startButton.IsEnabled = false;
-
+            toggleUi(false);
             Tools.TryPromptUpdate();
+        }
+
+        private void toggleUi(bool status)
+        {
+            changeMapleIdButton.IsEnabled = otherIdsLoaded ? false : status;
+            startButton.IsEnabled = status;
+            tespiaCheckBox.IsEnabled = status;
         }
 
         private async Task checkAccountLogin()
@@ -146,17 +152,16 @@ namespace Verdant
             if (Maple.CharacterImageUrl != null)
                 charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
 
-            changeMapleIdButton.IsEnabled = true;
-            startButton.IsEnabled = true;
+            toggleUi(true);
         }
 
         private async void startButton_Click(object sender, RoutedEventArgs e)
         {
-            startButton.IsEnabled = false;
+            toggleUi(false);
 
             try
             {
-                await Maple.Start();
+                await Maple.Start((bool)tespiaCheckBox.IsChecked);
             }
             catch (Exception ex)
             {
@@ -168,8 +173,9 @@ namespace Verdant
 
         private async void changeMapleIdButton_Click(object sender, RoutedEventArgs e)
         {
-            changeMapleIdButton.IsEnabled = false;
+            toggleUi(false);
             await Maple.GetMapleIds();
+            otherIdsLoaded = true;
 
             if (Maple.MapleIds.Count < 2)
             {
@@ -180,6 +186,7 @@ namespace Verdant
             Maple.MapleIds.ForEach(x => mapleIdBox.Items.Add(x));
             mapleIdBox.Text = Maple.MainCharName;
             mapleIdBox.IsEnabled = true;
+            toggleUi(true);
         }
 
         private async void mapleIdBox_DropDownClosed(object sender, EventArgs e)
@@ -189,7 +196,7 @@ namespace Verdant
                 return;
 
             charImage.Source = null;
-            mapleIdBox.IsEnabled = false;
+            toggleUi(false);
             mapleIdLabel.Content = "Switching...";
 
             try
@@ -204,7 +211,8 @@ namespace Verdant
             mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
             if (Maple.CharacterImageUrl != null)
                 charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
-            mapleIdBox.IsEnabled = true;
+            tespiaCheckBox.IsChecked = false;
+            toggleUi(true);
         }
 
         private void mapleIdBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -221,6 +229,23 @@ namespace Verdant
         private void logoutButton_Click(object sender, RoutedEventArgs e)
         {
             Account.UiLogout();
+        }
+
+        private async void tespiaCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            toggleUi(false);
+            try
+            {
+                await Maple.UseTespia();
+            }
+            catch (MapleGame.TespiaNotEnabled)
+            {
+                var mbr = MessageBox.Show("You have not signed up for the Test Server yet. Click yes to open up your browser to the signup page, signup, then try again.", "Verdant", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                if (mbr == MessageBoxResult.Yes)
+                    Process.Start("https://maplestory.nexon.game.naver.com/MyMaple/TestWorld/Apply");
+                tespiaCheckBox.IsChecked = false;
+            }
+            toggleUi(true);
         }
     }
 }

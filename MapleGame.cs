@@ -14,6 +14,9 @@ namespace Verdant
         // Note to self: We use the /CashShop URL because if there is an event page on the home page, we want a reliable page to get
         // Otherwise, it may redirect to an update page
 
+        private const string MAPLE_HOME = "https://maplestory.nexon.game.naver.com/News/CashShop";
+        private const string MAPLE_TESPIA_HOME = "https://maplestory.nexon.game.naver.com/Testworld/Main";
+
         public NaverAccount Account;
         public string MainCharName;
         public List<string> MapleIds;
@@ -21,6 +24,8 @@ namespace Verdant
 
         private string ngmPath;
         private string launchWID;
+
+        private string tespiaWID;
 
         private HttpClient webClient => Account.WebClient;
 
@@ -57,7 +62,8 @@ namespace Verdant
         }
 
         private const string LAUNCH_LINE = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:{1}' -passarg:'WebStart' -timestamp:{2} -position:'GameWeb|https://maplestory.nexon.game.naver.com/' -service:6";
-        public async Task Start(bool firstTry = true)
+        private const string TESPIA_LAUNCH_LINE = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589826:0 -token:'{0}:{1}' -passarg:'WebStart' -timestamp:{2} -position:'GameWeb|https://maplestory.nexon.game.naver.com/Testworld/Main' -service:6 -architectureplatform:'none'";
+        public async Task Start(bool tespia = false, bool firstTry = true)
         {
             // last minute cookies need to be get here - MSGENC and what not
             int ts = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // timestamp: https://stackoverflow.com/questions/17632584/how-to-get-the-unix-timestamp-in-c-sharp
@@ -76,18 +82,18 @@ namespace Verdant
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/authentication/swk?h="),
                 Content = null
             };
-            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
+            req.Headers.Add("Referer", !tespia ? MAPLE_HOME : MAPLE_TESPIA_HOME);
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
 
             var res = await webClient.SendAsync(req);
             string data = await res.Content.ReadAsStringAsync();
             Debug.WriteLine(data);
-			if(data.Contains("\"Code\":5"))
-			{
-				//"session expired try logging in again"
-				Debug.WriteLine("relogging expired session and crossing fingers");
+			if (data.Contains("\"Code\":5"))
+            {
+                //"session expired try logging in again"
+                Debug.WriteLine("relogging expired session and crossing fingers");
                 await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
-			}
+            }
             else if (!data.Contains("\"Code\":1"))
             {
                 if (firstTry && Account.Preloaded)
@@ -97,7 +103,7 @@ namespace Verdant
                     await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
                     Account.SaveCookies();
                     // hard retry
-                    await Start(false);
+                    await Start(tespia, false);
                     return;
                 }
                 throw new Exception("could not auth for game...");
@@ -106,7 +112,7 @@ namespace Verdant
             string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))["MSGENC"].Value;
 
             Debug.WriteLine("launching");
-            string args = String.Format(LAUNCH_LINE, msgenc, launchWID, ts.ToString());
+            string args = String.Format(!tespia ? LAUNCH_LINE : TESPIA_LAUNCH_LINE, msgenc, launchWID, ts.ToString());
             var psi = new ProcessStartInfo(ngmPath, args);
             Process.Start(psi);
         }
@@ -114,15 +120,15 @@ namespace Verdant
         private async Task channeling()
         {
             await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046"); // redirs a few times for cookies
-            await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop"); // the home page may redirect too
+            await webClient.GetAsync(MAPLE_HOME); // the home page may redirect too
         }
 
         private Regex charRepRegex = new Regex("<span class=\"sub_user_name\">(.+?)</span>");
-        private Regex launchWIDRegex = new Regex("PLATFORM\\.LaunchGame\\('(\\d+)'\\)");
+        private Regex launchWIDRegex = new Regex("\\.LaunchGame\\('(\\d+)'\\)");
         private Regex charImgRegex = new Regex("<span class=\"sub_login_char\"><img src=\"(.+?)\" onerror=");
         private async Task<bool> getCurrentMaple()
         {
-            HttpResponseMessage res = await webClient.GetAsync("https://maplestory.nexon.game.naver.com/News/CashShop");
+            HttpResponseMessage res = await webClient.GetAsync(MAPLE_HOME);
             res.EnsureSuccessStatusCode();
 
             string data = await res.Content.ReadAsStringAsync();
@@ -156,7 +162,7 @@ namespace Verdant
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/IDList")
             };
-            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
+            req.Headers.Add("Referer", MAPLE_HOME);
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
 
             HttpResponseMessage res = await webClient.SendAsync(req);
@@ -175,7 +181,7 @@ namespace Verdant
             {
                 { "id", mapleId },
                 { "master", "0" },
-                { "redirectTo", "https://maplestory.nexon.game.naver.com/News/CashShop" }
+                { "redirectTo", MAPLE_HOME }
             };
             var postData = new FormUrlEncodedContent(_postData);
 
@@ -185,13 +191,27 @@ namespace Verdant
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/ChangeID")
             };
             req.Content = postData;
-            req.Headers.Add("Referer", "https://maplestory.nexon.game.naver.com/News/CashShop");
+            req.Headers.Add("Referer", MAPLE_HOME);
             HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
 
             Account.SaveCookies();
 
             await getCurrentMaple();
+        }
+
+        public class TespiaNotEnabled : Exception { }
+
+        public async Task UseTespia()
+        {
+            HttpResponseMessage res = await webClient.GetAsync(MAPLE_TESPIA_HOME);
+            res.EnsureSuccessStatusCode();
+            string data = await res.Content.ReadAsStringAsync();
+
+            Match wid = launchWIDRegex.Match(data);
+            if (!wid.Success)
+                throw new TespiaNotEnabled();
+            tespiaWID = wid.Groups[1].Value;
         }
     }
 }

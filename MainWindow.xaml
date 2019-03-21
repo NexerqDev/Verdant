@@ -5,20 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Verdant"
         mc:Ignorable="d"
-        Title="Verdant" Height="274.15" Width="581.207" Loaded="Window_Loaded" Background="Black" Icon="/Verdant;component/verdant.ico" ResizeMode="NoResize">
+        Title="Verdant" Height="294.071" Width="581.207" Loaded="Window_Loaded" Background="Black" Icon="/Verdant;component/verdant.ico" ResizeMode="NoResize">
 
     <Grid>
-        <Image HorizontalAlignment="Left" Height="245" VerticalAlignment="Top" Width="575" Source="/Verdant;component/Resources/ms-asylum.jpg" Stretch="UniformToFill" OpacityMask="#59000000"/>
-        <Button x:Name="startButton" Content="GAME START // 게임시작" HorizontalAlignment="Left" Height="47" Margin="363,171,0,0" VerticalAlignment="Top" Width="193" Click="startButton_Click" Style="{StaticResource VerdantStyling}"/>
-        <Label x:Name="mapleIdLabel" Content="Web Main Character (대표 캐릭터): " HorizontalAlignment="Left" Height="28" Margin="10,125,0,0" VerticalAlignment="Top" Width="348" Foreground="White"/>
-        <ComboBox x:Name="mapleIdBox" HorizontalAlignment="Left" Height="26" Margin="10,192,0,0" VerticalAlignment="Top" Width="234" IsReadOnly="True" DropDownClosed="mapleIdBox_DropDownClosed" PreviewKeyDown="mapleIdBox_PreviewKeyDown" Style="{StaticResource VerdantStyling}" Foreground="#FF0E0E0E"/>
-        <Button x:Name="changeMapleIdButton" Content="Change Maple ID // 메이플ID 선택" HorizontalAlignment="Left" Height="29" Margin="10,158,0,0" VerticalAlignment="Top" Width="234" Click="changeMapleIdButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Image HorizontalAlignment="Left" Height="265" VerticalAlignment="Top" Width="575" Source="/Verdant;component/Resources/ms-asylum.jpg" Stretch="UniformToFill" OpacityMask="#59000000"/>
+        <Button x:Name="startButton" Content="GAME START // 게임시작" HorizontalAlignment="Left" Height="47" Margin="363,190,0,0" VerticalAlignment="Top" Width="193" Click="startButton_Click" Style="{StaticResource VerdantStyling}"/>
+        <Label x:Name="mapleIdLabel" Content="Web Main Character (대표 캐릭터): " HorizontalAlignment="Left" Height="28" Margin="10,148,0,0" VerticalAlignment="Top" Width="348" Foreground="White"/>
+        <ComboBox x:Name="mapleIdBox" HorizontalAlignment="Left" Height="26" Margin="10,215,0,0" VerticalAlignment="Top" Width="234" IsReadOnly="True" DropDownClosed="mapleIdBox_DropDownClosed" PreviewKeyDown="mapleIdBox_PreviewKeyDown" Style="{StaticResource VerdantStyling}" Foreground="#FF0E0E0E" IsEnabled="False"/>
+        <Button x:Name="changeMapleIdButton" Content="Change Maple ID // 메이플ID 선택" HorizontalAlignment="Left" Height="29" Margin="10,181,0,0" VerticalAlignment="Top" Width="234" Click="changeMapleIdButton_Click" Style="{StaticResource VerdantStyling}"/>
         <Label Content="Verdant" HorizontalAlignment="Left" Height="57" Margin="97,23,0,0" VerticalAlignment="Top" Width="143" FontSize="36" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
         <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="101,74,0,0" VerticalAlignment="Top" Width="309" FontSize="14" Foreground="White"/>
         <Label x:Name="statusLabel" Content="Logged in." HorizontalAlignment="Left" Height="39" Margin="304,14,0,0" VerticalAlignment="Top" Width="252" Foreground="White" HorizontalContentAlignment="Right"/>
         <Button x:Name="logoutButton" Content="Logout // 로그아웃" HorizontalAlignment="Left" Height="26" Margin="416,43,0,0" VerticalAlignment="Top" Width="140" Click="logoutButton_Click" Style="{StaticResource VerdantStyling}"/>
-        <Image x:Name="charImage" HorizontalAlignment="Left" Height="62" Margin="265,158,0,0" VerticalAlignment="Top" Width="62" Stretch="UniformToFill"/>
+        <Image x:Name="charImage" HorizontalAlignment="Left" Height="62" Margin="265,181,0,0" VerticalAlignment="Top" Width="62" Stretch="UniformToFill"/>
+        <CheckBox x:Name="tespiaCheckBox" Content="Use Tespia (테스트월드)" HorizontalAlignment="Left" Height="19" Margin="12,127,0,0" VerticalAlignment="Top" Width="157" Foreground="White" Checked="tespiaCheckBox_Checked"/>
 
     </Grid>
 </Window>
