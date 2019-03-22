@@ -109,7 +109,7 @@ namespace Verdant
                 throw new Exception("could not auth for game...");
             }
 
-            string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))["MSGENC"].Value;
+            string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))[!tespia ? "MSGENC" : "MSGENCT"].Value;
 
             Debug.WriteLine("launching");
             string args = String.Format(!tespia ? LAUNCH_LINE : TESPIA_LAUNCH_LINE, msgenc, launchWID, ts.ToString());
