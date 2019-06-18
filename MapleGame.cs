@@ -79,10 +79,10 @@ namespace Verdant
             HttpRequestMessage req = new HttpRequestMessage()
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri("https://maplestory.nexon.game.naver.com/authentication/swk?h="),
+                RequestUri = new Uri("https://maplestory.nexon.game.naver.com/authentication/swk" + (tespia ? "t" : "") + "?h="),
                 Content = null
             };
-            req.Headers.Add("Referer", !tespia ? MAPLE_HOME : MAPLE_TESPIA_HOME);
+            req.Headers.Add("Referer", tespia ? MAPLE_TESPIA_HOME : MAPLE_HOME);
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
 
             var res = await webClient.SendAsync(req);
@@ -94,7 +94,7 @@ namespace Verdant
                 Debug.WriteLine("relogging expired session and crossing fingers");
                 await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
             }
-            else if (!data.Contains("\"Code\":1"))
+            else if (!data.Contains("\"Code\":" + (tespia ? "0" : "1"))) // for some reason swkt code 0 for success
             {
                 if (firstTry && Account.Preloaded)
                 {
@@ -109,10 +109,10 @@ namespace Verdant
                 throw new Exception("could not auth for game...");
             }
 
-            string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))[!tespia ? "MSGENC" : "MSGENCT"].Value;
+            string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))[tespia ? "MSGENCT" : "MSGENC"].Value;
 
             Debug.WriteLine("launching");
-            string args = String.Format(!tespia ? LAUNCH_LINE : TESPIA_LAUNCH_LINE, msgenc, launchWID, ts.ToString());
+            string args = String.Format(tespia ? TESPIA_LAUNCH_LINE : LAUNCH_LINE, msgenc, tespia ? tespiaWID : launchWID, ts.ToString());
             var psi = new ProcessStartInfo(ngmPath, args);
             Process.Start(psi);
         }

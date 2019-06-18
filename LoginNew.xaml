@@ -10,7 +10,7 @@
         <Image HorizontalAlignment="Left" Height="692" VerticalAlignment="Top" Width="521" Source="Resources/68983602-network-wallpapers.jpg" Stretch="UniformToFill" OpacityMask="#D8000000"/>
 
         <Label Content="Welcome to Verdant." HorizontalAlignment="Left" Height="52" Margin="91,18,-160,0" VerticalAlignment="Top" Width="361" FontSize="36" Foreground="White"/>
-        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="220,3,0,0" VerticalAlignment="Top" Width="291" FontSize="14" Foreground="White"/>
+        <Label Content="Your local MapleStory launcher for Naver IDs." HorizontalAlignment="Left" Height="30" Margin="205,3,0,0" VerticalAlignment="Top" Width="304" FontSize="14" Foreground="White"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="verdant.png"/>
         <WebBrowser x:Name="webBrowser" HorizontalAlignment="Left" Height="538" Margin="10,117,0,0" VerticalAlignment="Top" Width="480" Navigating="webBrowser_Navigating" LoadCompleted="webBrowser_LoadCompleted"/>
         <Button x:Name="resetButton" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="400,82,0,0" VerticalAlignment="Top" Width="102" Click="resetButton_Click"/>
