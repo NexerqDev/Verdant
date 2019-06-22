@@ -155,13 +155,49 @@ namespace Verdant
             toggleUi(true);
         }
 
-        private async void startButton_Click(object sender, RoutedEventArgs e)
+        private bool noAuth = false;
+        private void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            startGame();
+        }
+
+        private async void startGame()
         {
             toggleUi(false);
 
             try
             {
                 await Maple.Start((bool)tespiaCheckBox.IsChecked);
+            }
+            catch (VerdantException.NoAuthException)
+            {
+                if (noAuth)
+                {
+                    MessageBox.Show("We failed to auth. Login data will be deleted, and Verdant will be closed. Please try logging in completely again.");
+                    File.Delete(PathToCookies);
+                    Close();
+                    return;
+                }
+
+                // last ditch
+                noAuth = true;
+                await mapleIdSelection(true);
+                startButton.IsEnabled = false;
+
+                if (Maple.MapleIds.Count == 1)
+                {
+                    mapleIdBox.Text = Maple.MapleIds[0];
+                    await switchMapleId();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("There was an error starting the game, but... we have one last trick. Please select the Maple ID in the dropdown box below that you would like to login to, and we can try again!", "Verdant");
+                    mapleIdBox.Focus();
+                    mapleIdBox.IsDropDownOpen = true;
+                }
+
+                return;
             }
             catch (Exception ex)
             {
@@ -171,28 +207,36 @@ namespace Verdant
             Close();
         }
 
-        private async void changeMapleIdButton_Click(object sender, RoutedEventArgs e)
+        private void changeMapleIdButton_Click(object sender, RoutedEventArgs e)
+        {
+            mapleIdSelection();
+        }
+
+        private async Task mapleIdSelection(bool inStart = false)
         {
             toggleUi(false);
             await Maple.GetMapleIds();
             otherIdsLoaded = true;
 
-            if (Maple.MapleIds.Count < 2)
+            if (!inStart && Maple.MapleIds.Count < 2)
             {
                 MessageBox.Show("You only have 1 maple id...");
                 return;
             }
 
             Maple.MapleIds.ForEach(x => mapleIdBox.Items.Add(x));
-            mapleIdBox.Text = Maple.MainCharName;
             mapleIdBox.IsEnabled = true;
             toggleUi(true);
         }
 
-        private async void mapleIdBox_DropDownClosed(object sender, EventArgs e)
+        private void mapleIdBox_DropDownClosed(object sender, EventArgs e)
         {
-            // in case
-            if (mapleIdBox.Text == Maple.MainCharName)
+            switchMapleId();
+        }
+
+        private async Task switchMapleId()
+        {
+            if (String.IsNullOrEmpty(mapleIdBox.Text) || !Maple.MapleIds.Contains(mapleIdBox.Text))
                 return;
 
             charImage.Source = null;
@@ -212,6 +256,13 @@ namespace Verdant
             if (Maple.CharacterImageUrl != null)
                 charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
             tespiaCheckBox.IsChecked = false;
+
+            if (noAuth)
+            {
+                startGame();
+                return;
+            }
+
             toggleUi(true);
         }
 

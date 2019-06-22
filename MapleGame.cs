@@ -11,10 +11,7 @@ namespace Verdant
 {
     public class MapleGame
     {
-        // Note to self: We use the /CashShop URL because if there is an event page on the home page, we want a reliable page to get
-        // Otherwise, it may redirect to an update page
-
-        private const string MAPLE_HOME = "https://maplestory.nexon.game.naver.com/News/CashShop";
+        private const string MAPLE_HOME = "https://maplestory.nexon.game.naver.com/Home/Main";
         private const string MAPLE_TESPIA_HOME = "https://maplestory.nexon.game.naver.com/Testworld/Main";
 
         public NaverAccount Account;
@@ -71,7 +68,20 @@ namespace Verdant
             // last min update sesh
             Debug.WriteLine("updating session");
             var sesRes = await webClient.GetAsync("https://sso.nexon.game.naver.com/Ajax/Default.aspx?_vb=UpdateSession");
-            Debug.WriteLine(await sesRes.Content.ReadAsStringAsync());
+            string sesData = await sesRes.Content.ReadAsStringAsync();
+            Debug.WriteLine(sesData);
+            if (!sesData.Contains("name=\"ErrorCode\" value=\"0\""))
+            {
+                if (!firstTry)
+                    throw new Exception("session error");
+
+                // session update failed, implies loginProc to refresh NPP
+                Debug.WriteLine("updateSess failed, should loginProc");
+                await loginProc();
+                // hard retry
+                await Start(tespia, false);
+                return;
+            }
 
             Debug.WriteLine("msgenc update");
             // msgenc
@@ -88,25 +98,11 @@ namespace Verdant
             var res = await webClient.SendAsync(req);
             string data = await res.Content.ReadAsStringAsync();
             Debug.WriteLine(data);
-			if (data.Contains("\"Code\":5"))
+            if (!data.Contains("\"Code\":" + (tespia ? "0" : "1"))) // for some reason swkt code 0 for success
             {
-                //"session expired try logging in again"
-                Debug.WriteLine("relogging expired session and crossing fingers");
-                await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
-            }
-            else if (!data.Contains("\"Code\":" + (tespia ? "0" : "1"))) // for some reason swkt code 0 for success
-            {
-                if (firstTry && Account.Preloaded)
-                {
-                    Debug.WriteLine("preload, so trying loginproc to update sess");
-                    await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/logout.aspx?gamecode=589824");
-                    await Account.WebClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
-                    Account.SaveCookies();
-                    // hard retry
-                    await Start(tespia, false);
-                    return;
-                }
-                throw new Exception("could not auth for game...");
+                // the hell hole
+                // there is one last fix - reselect maple id.
+                throw new VerdantException.NoAuthException();
             }
 
             string msgenc = Account.Cookies.GetCookies(new Uri("http://maplestory.nexon.game.naver.com"))[tespia ? "MSGENCT" : "MSGENC"].Value;
@@ -123,9 +119,35 @@ namespace Verdant
             await webClient.GetAsync(MAPLE_HOME); // the home page may redirect too
         }
 
-        private Regex charRepRegex = new Regex("<span class=\"sub_user_name\">(.+?)</span>");
+        private async Task loginProc()
+        {
+            await webClient.GetAsync("http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
+
+            // get the home page & update the launch WID
+            HttpRequestMessage req = new HttpRequestMessage() { RequestUri = new Uri(MAPLE_HOME) };
+            req.Headers.Add("Referer", "http://nxgamechanneling.nexon.game.naver.com/login/loginproc.aspx?gamecode=589824");
+
+            HttpResponseMessage res = await webClient.SendAsync(req);
+            res.EnsureSuccessStatusCode();
+            string data = await res.Content.ReadAsStringAsync();
+
+            Match wid = launchWIDRegex.Match(data);
+            if (!wid.Success)
+            {
+                Debug.WriteLine("couldnt update wid!! probably will be a web verification ingame fail!");
+            }
+            else
+            {
+                launchWID = wid.Groups[1].Value;
+                Debug.WriteLine("wid update: " + launchWID);
+            }
+
+            Account.SaveCookies();
+        }
+
+        private Regex charRepRegex = new Regex("<dd class=\"login_id\">.*?>(.+?).</");
         private Regex launchWIDRegex = new Regex("\\.LaunchGame\\('(\\d+)'\\)");
-        private Regex charImgRegex = new Regex("<span class=\"sub_login_char\"><img src=\"(.+?)\" onerror=");
+        private Regex charImgRegex = new Regex("<img src=\"(.+?)\" alt=\"\uB300\uD45C");
         private async Task<bool> getCurrentMaple()
         {
             HttpResponseMessage res = await webClient.GetAsync(MAPLE_HOME);

@@ -10,5 +10,6 @@ namespace Verdant
     {
         public class GameNotFoundException : Exception { }
         public class ChannelingRequiredException : Exception { }
+        public class NoAuthException : Exception { }
     }
 }
