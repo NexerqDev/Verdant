@@ -259,6 +259,7 @@ namespace Verdant
 
             if (noAuth)
             {
+                Account.SaveCookies();
                 startGame();
                 return;
             }
