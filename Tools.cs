@@ -112,7 +112,7 @@ namespace Verdant
 
                 string local = GetProgramVersion();
 
-                if (remote != local)
+                if (!remote.StartsWith(local))
                 {
                     MessageBoxResult mbr = MessageBox.Show("A new update for Verdant is available!: " + remote + "\n\nClick yes to open the GitHub release page to download the latest update, no to ignore this update for now, or cancel to suppress update checking.", "Verdant - Update available!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
                     if (mbr == MessageBoxResult.No)
