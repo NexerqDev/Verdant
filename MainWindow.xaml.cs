@@ -20,6 +20,7 @@ namespace Verdant
     public partial class MainWindow : Window
     {
         public string PathToCookies = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "login.vdt");
+        public string QuickStart = null;
 
         public NaverAccount Account = null;
         public MapleGame Maple;
@@ -61,6 +62,23 @@ namespace Verdant
         {
             mapleIdLabel.Content = "Loading...";
 
+            string[] args = Environment.GetCommandLineArgs();
+            bool loadCustom = false;
+            if (args.Length > 1)
+            {
+                // custom form
+                if (args[1].EndsWith(".dll"))
+                    loadCustom = true;
+
+                // custom cookie file
+                else if (args[1].EndsWith(".vdt"))
+                    PathToCookies = args[1];
+
+                else
+                    QuickStart = args[1];
+            }
+
+
 
             // NAVER LOGIN
             // check for preexist login data, and verify if session still valid
@@ -84,10 +102,8 @@ namespace Verdant
             statusLabel.Content = "Logged in.";
 
 
-
-            // check for a custom form
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1 && args[1].EndsWith(".dll"))
+            // custom form post-login load
+            if (loadCustom)
             {
                 Assembly asm = Assembly.LoadFile(Path.GetFullPath(args[1]));
                 Type t = asm.GetExportedTypes().First(a => typeof(Window).IsAssignableFrom(a));
@@ -99,7 +115,6 @@ namespace Verdant
                 Close();
                 return;
             }
-
 
 
             // MAPLE LOGIN/CHANNEL
@@ -147,10 +162,19 @@ namespace Verdant
                 return;
             }
 
+            
+            if (QuickStart != null)
+            {
+                mapleIdLabel.Content = "Quickstarting...";
+                startGame();
+                return;
+            }
+
             mapleIdLabel.Content = "Web Main Character (대표 캐릭터): " + Maple.MainCharName;
 
             if (Maple.CharacterImageUrl != null)
                 charImage.Source = Tools.UrlToXamlImage(Maple.CharacterImageUrl);
+
 
             toggleUi(true);
         }
@@ -187,6 +211,13 @@ namespace Verdant
                 if (Maple.MapleIds.Count == 1)
                 {
                     mapleIdBox.Text = Maple.MapleIds[0];
+                    await switchMapleId();
+                    Close();
+                }
+                else if (Maple.MapleIds.Contains(QuickStart))
+                {
+                    Debug.WriteLine("quickstart id last ditch: " + QuickStart);
+                    mapleIdBox.Text = QuickStart;
                     await switchMapleId();
                     Close();
                 }
