@@ -76,7 +76,8 @@ namespace Verdant
                     throw new Exception("session error");
 
                 // session update failed, implies loginProc to refresh NPP
-                Debug.WriteLine("updateSess failed, should loginProc");
+                Debug.WriteLine("updateSess failed, should jslib + loginProc");
+                await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046"); // i think this reduces a lot of other headache
                 await loginProc();
                 // hard retry
                 await Start(tespia, false);
