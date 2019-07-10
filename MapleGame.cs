@@ -42,6 +42,20 @@ namespace Verdant
             // NOTE: make sure if >1 maple id, there is one selected as default on the website!!
             // Or will not channel properly!!
             Debug.WriteLine("getting maple");
+
+            // preload - ensure everything is smooth with 2x get (loginproc on second if no good) + cheeky channel
+            if (Account.Preloaded)
+            {
+                Debug.WriteLine("preload get");
+                await webClient.GetAsync(MAPLE_HOME);
+                Debug.WriteLine("pre 1");
+                await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046");
+                Debug.WriteLine("pre 2");
+                await webClient.GetAsync(MAPLE_HOME);
+                Debug.WriteLine("pre ok");
+                Account.SaveCookies();
+            }
+
             if (!(await getCurrentMaple()))
                 throw new VerdantException.ChannelingRequiredException();
         }
@@ -77,7 +91,6 @@ namespace Verdant
 
                 // session update failed, implies loginProc to refresh NPP
                 Debug.WriteLine("updateSess failed, should jslib + loginProc");
-                await webClient.GetAsync("http://api.game.naver.com/js/jslib.nhn?gameId=P_PN000046"); // i think this reduces a lot of other headache
                 await loginProc();
                 // hard retry
                 await Start(tespia, false);
