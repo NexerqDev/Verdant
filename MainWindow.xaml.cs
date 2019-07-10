@@ -185,7 +185,7 @@ namespace Verdant
             startGame();
         }
 
-        private async void startGame()
+        private async Task startGame()
         {
             toggleUi(false);
 
@@ -291,7 +291,7 @@ namespace Verdant
             if (noAuth)
             {
                 Account.SaveCookies();
-                startGame();
+                await startGame();
                 return;
             }
 
