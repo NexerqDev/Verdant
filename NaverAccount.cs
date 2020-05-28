@@ -64,6 +64,7 @@ namespace Verdant
             WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko");
             WebClient.DefaultRequestHeaders.Add("DNT", "1");
             WebClient.DefaultRequestHeaders.Add("Accept-Language", "ko-KR");
+            WebClient.DefaultRequestHeaders.Add("Referer", "https://maplestory.nexon.game.naver.com/Home/Main");
         }
 
         public void SaveCookies()
