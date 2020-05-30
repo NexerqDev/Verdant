@@ -21,9 +21,9 @@ Pre-compiled downloads can be found [here](https://github.com/NexerqDev/Verdant/
 
 All you have to do is login to your Naver account, change your Maple ID if you desire, then launch the game! (If you run into troubles such as the terrible CAPTCHAs/other changes on Naver's end, [here is an alternative method you can try to login with](https://github.com/NexerqDev/Verdant/blob/master/other/alternate_login_method.md).)
 
-Note that NGM must be installed, and obviously MapleStory must be too for this launcher to function properly! Other than that, enjoy!
+Note that NGM (Nexon Game Manager) must be installed, and obviously MapleStory must be too for this launcher to function properly! Other than that, enjoy! (You shouldn't need to worry about NGM if you installed MapleStory with the installer; only if you copied the game files from another computer.)
 
-Also, as this program is still definitely a work-in-progress, expect bugs! If you do find any however, please report them at [the issue tracker](https://github.com/NexerqDev/Verdant/issues), that would be most appreciated.
+Also, as this program is still definitely a work-in-progress, expect bugs! If you do find any however, please report them at [the issue tracker](https://github.com/NexerqDev/Verdant/issues) or let me know on Discord, that would be most appreciated. I'm not always active on MapleStory, but I'm happy to look into issues and fix them.
 
 If you do find this program useful, please consider leaving it a [star](https://github.com/NexerqDev/Verdant/stargazers)! Thanks!
 
