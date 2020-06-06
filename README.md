@@ -19,6 +19,8 @@
 ## Usage
 Pre-compiled downloads can be found [here](https://github.com/NexerqDev/Verdant/releases). ([프로그램 다운](https://github.com/NexerqDev/Verdant/releases))
 
+**New**: Feel free to check out the [GitHub actions page](https://github.com/NexerqDev/Verdant/actions) for some builds done on GitHub's end (choose latest build and under artifacts), perhaps you may trust those binaries more :).
+
 All you have to do is login to your Naver account, change your Maple ID if you desire, then launch the game! (If you run into troubles such as the terrible CAPTCHAs/other changes on Naver's end, [here is an alternative method you can try to login with](https://github.com/NexerqDev/Verdant/blob/master/other/alternate_login_method.md).)
 
 Note that NGM (Nexon Game Manager) must be installed, and obviously MapleStory must be too for this launcher to function properly! Other than that, enjoy! (You shouldn't need to worry about NGM if you installed MapleStory with the installer; only if you copied the game files from another computer.)
