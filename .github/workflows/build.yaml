@@ -1,0 +1,22 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  build:
+    runs-on: windows-latest
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.0.0
+    - name: Build Verdant release
+      run: msbuild Verdant.sln -p:Configuration=Release
+    - name: Upload release as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Verdant-Release
+        path: bin/Release/*
