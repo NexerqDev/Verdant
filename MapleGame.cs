@@ -21,7 +21,6 @@ namespace Verdant
 
         private string ngmPath;
         private string launchWID;
-
         private string tespiaWID;
 
         private HttpClient webClient => Account.WebClient;
@@ -187,19 +186,30 @@ namespace Verdant
             if (imgM.Success)
                 CharacterImageUrl = imgM.Groups[1].Value.Replace("/180", "");
 
+            Match switchM = mapleIdSwitchTokenRegex.Match(data);
+            if (switchM.Success)
+                mapleIdSwitchToken = switchM.Groups[1].Value;
+
             return true;
         }
 
         private Regex mapleIdsRegex = new Regex(">(.+?)<\\/a>");
+        private Regex mapleIdSwitchTokenRegex = new Regex("name=\"__RequestVerificationToken\".*value=\"(.+?)\"");
+        private string mapleIdSwitchToken = null;
         public async Task GetMapleIds()
         {
             HttpRequestMessage req = new HttpRequestMessage()
             {
-                Method = HttpMethod.Get,
+                Method = HttpMethod.Post,
                 RequestUri = new Uri("https://maplestory.nexon.game.naver.com/Authentication/Email/IDList")
             };
-            req.Headers.Add("Referer", MAPLE_HOME);
             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            var _postData = new Dictionary<string, string>
+            {
+                { "__RequestVerificationToken", mapleIdSwitchToken }
+            };
+            var postData = new FormUrlEncodedContent(_postData);
+            req.Content = postData;
 
             HttpResponseMessage res = await webClient.SendAsync(req);
             res.EnsureSuccessStatusCode();
