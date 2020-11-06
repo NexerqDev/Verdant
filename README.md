@@ -1,3 +1,12 @@
+That is it for Verdant; it was a fun (and hopefully useful!) personal project to maintain.
+
+It was a good run, goodbye us foreigners 😢
+
+RIP MapleStory x Naver Channeling 2020.
+
+<details>
+<summary>Old readme</summary>
+
 <div align="center">
 
 ![Verdant logo](verdant.png)
@@ -38,3 +47,5 @@ A note for Nexon (넥슨): if you don't like this software, please contact me vi
 
 ## License
 Zlib (full text available in the root of the repository.)
+
+</details>
