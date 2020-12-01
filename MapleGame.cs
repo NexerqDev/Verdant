@@ -172,8 +172,9 @@ namespace Verdant
 
             Match wid = launchWIDRegex.Match(data);
             if (!wid.Success)
-                return false;
-            launchWID = wid.Groups[1].Value;
+                launchWID = "0";
+            else
+                launchWID = wid.Groups[1].Value;
             Debug.WriteLine("wid: " + launchWID);
 
             Match m = charRepRegex.Match(data);
