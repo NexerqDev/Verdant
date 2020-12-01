@@ -34,7 +34,7 @@ namespace Verdant
             Account = new NaverAccount(PathToCookies);
 
             toggleUi(false);
-            Tools.TryPromptUpdate();
+            //Tools.TryPromptUpdate();
         }
 
         private void toggleUi(bool status)
